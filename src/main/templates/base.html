@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who's Plants</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Adicione Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/main.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static', filename='icons/Site-favicon.ico')}}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col col-2">
+                    <img src="{{url_for('static', filename='images/LEAFpatch.webp')}}" alt="Logo" class="image-logo">
+                </div>
+                <div class="col ar">
+                    <span class="enfase">
+                        Advinhe a planta do dia!
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block conteudo %}
+        {% endblock %}
+    </main>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
