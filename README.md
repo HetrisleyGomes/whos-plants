@@ -123,14 +123,14 @@ whos-plants/
 - **Dicas**: Duas dicas opcionais, reveladas após 5 e 10 palpites.
 - **Tabela de Palpites**: Uma tabela com seus palpites anteriores e a comparação de cada característica.
 
-### Modos Futuros
+### Modos Atuais
+- Modo "Planta da versão Global": Tente adivinhar a planta da versão de Plants vs Zombies 2.
 - Modo "Planta da versão chinesa": Tente adivinhar a planta da versão chinesa de Plants vs Zombies 2.
-- Modo "Planta da versão Heroes": Tente adivinhar a planta da versão de Plants vs Zombies Heroes.
 
 ### Funcionalidades Futuras
 - Adicionar informações sobre quantas pessoas acertaram a planta do dia.
 - Possibilidade de compartilhar o número de palpites usados para adivinhar a planta do dia.
-- Modos adicionais baseados em versões do jogo.
+- Modos adicionais baseados em outras versões do jogo.
 
 ## ⚙️ Tecnologias Usadas
 O projeto foi construído utilizando uma combinação de tecnologias para fornecer uma experiência divertida e interativa. Aqui estão as principais:
