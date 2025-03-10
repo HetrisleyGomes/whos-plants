@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="{{url_for('static', filename='icons/Site-favicon.ico')}}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
 </head>
-<body>
+<body class="{{ 'chinease-thamed' if request.endpoint == 'main_bp.chinease' }}">
     <header>
         <div class="container">
             <div class="row">
@@ -23,9 +23,22 @@
                     <img src="{{url_for('static', filename='images/LEAFpatch.webp')}}" alt="Logo" class="image-logo">
                 </div>
                 <div class="col ar">
-                    <span class="enfase">
+                    <p class="enfase aga1">
                         Advinhe a planta do dia!
-                    </span>
+                    </p>
+                    <p class="enfase">
+                        Versão {% block versao %}
+                        {% endblock %}
+                    </p>
+                </div>
+                <div class="col ar">
+                    <ul>
+
+                            <li><a href="{{url_for('main_bp.index')}}">Global Version</a></li>
+
+                            <li><a href="{{url_for('main_bp.chinease')}}">Chinease Version</a></li>
+
+                    </ul>
                 </div>
             </div>
         </div>

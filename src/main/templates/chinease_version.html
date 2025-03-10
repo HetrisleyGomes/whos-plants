@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block versao %}
-Global
+Chinesa
 {% endblock versao %}
 {% block conteudo %}
+
 <div class="container">
-    <form action="/makeguess" class="form" method="post">
+    <form action="/makeguess_chinease" class="form" method="post">
         <fieldset {% if victory %} disabled {% endif %}>
         <div class="row align-items-center">
             <div class="col-auto">
@@ -35,7 +36,7 @@ Global
 <div class="container">
     {% if victory %}
     <div style="display: inline-flex; gap: 5px;">
-        {% if number_of_trys[0] == 1 %}
+        {% if number_of_trys[1] == 1 %}
             <span class="enfase">De primeira! </span>
         {% endif %}
         <span class="enfase">Você descobriu em {{ number_of_trys[1] }} tentativas!</span>
@@ -83,6 +84,7 @@ Global
             <th>Raridade</th>
             <th>Tipo de planta</th>
             <th>Origem</th>
+            <th>Classificação</th>
         </thead>
         {% for row in rows %}
             <tr>
@@ -155,6 +157,7 @@ Global
                 <td class="{{ 'background-verde' if row.rarity == data['Rarity'][rand-1] else 'background-vermelho' }}">{{ row.rarity }}</td>
                 <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
                 <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
+                <td class="{{ 'background-verde' if row.classification == data['Classification'][rand-1] else 'background-vermelho' }}">{{ row.classification }}</td>
             </tr>
         {% endfor %}
     </table>
