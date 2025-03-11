@@ -14,8 +14,12 @@ choosed_names = []
 chinease_used_values = []
 chinease_choosed_names = []
 
+infinity_used_values = []
+infinity_choosed_names = []
+
 victory = False
 chinease_victory = False
+infinity_victory = False
 number_of_trys = [0,0,0]
 
 @main_bp.route("/")
@@ -37,6 +41,7 @@ def index():
         choosed_names = choosed_names,
         rand = rand,
         victory = victory,
+        chinease_victory = chinease_victory,
         number_of_trys = number_of_trys
         )
 
@@ -57,8 +62,29 @@ def chinease():
         used_values = chinease_used_values,
         choosed_names = chinease_choosed_names,
         rand = rand,
-        victory = chinease_victory,
+        victory = victory,
+        chinease_victory = chinease_victory,
         number_of_trys = number_of_trys
+        )
+
+@main_bp.route("/infinity")
+def infinity():
+    if last_sheet != 'Database':
+        global rand, data
+        rand = gerar_numero_aleatorio_random('Database')
+        data = get_data('Database')
+
+    names = data['Name'].tolist()
+
+    return render_template(
+        "infinity.html",
+        data = data,
+        names = names,
+        rows = get_rows(9),
+        used_values = infinity_used_values,
+        choosed_names = infinity_choosed_names,
+        rand = rand,
+        victory = infinity_victory
         )
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
@@ -89,6 +115,29 @@ def guesser_chinease():
 
     return redirect(url_for('main_bp.chinease'))
 
+@main_bp.route("/makeguess_infinity", methods=["GET","POST"])
+def guesser_infinity():
+    guess = request.form.get('guess')
+    print(guess.capitalize())
+    item = data[data['Name'].str.lower() == guess.lower()]
+    global infinity_victory
+    infinity_used_values.append(int(item['ID'].iloc[0]))
+    infinity_choosed_names.append(item['Name'].iloc[0])
+    if data['Name'][rand-1] == item['Name'].iloc[0]:
+        infinity_victory = True
+    return redirect(url_for('main_bp.infinity'))
+
+@main_bp.route("/reset_infinity")
+def reset_infinity():
+    global rand
+    rand = gerar_numero_aleatorio_random('Database')
+    global infinity_victory
+    infinity_used_values.clear()
+    infinity_choosed_names.clear()
+    infinity_victory = False
+    return redirect(url_for('main_bp.infinity'))
+
+
 def gerar_numero_aleatorio(sheet_name):
     global last_sheet
     last_sheet = sheet_name
@@ -117,6 +166,26 @@ def gerar_numero_aleatorio(sheet_name):
 
     return numero_aleatorio
 
+def gerar_numero_aleatorio_random(sheet_name):
+    global last_sheet
+    last_sheet = sheet_name
+    # Carregar o arquivo Excel
+    data = pd.read_excel(file_path, sheet_name=sheet_name)
+    df = data[data['Name'].notna()]  # remove apenas as linhas onde todos os valores são NaN
+
+    # Obter o número de ocorrências (número de linhas no arquivo)
+    num_ocorrencias = len(df)
+
+    # Garantir que o número de ocorrências seja no mínimo 1
+    if num_ocorrencias < 1:
+        raise ValueError("O arquivo não possui dados suficientes.")
+
+    # Definir o limite superior como o número de ocorrências
+    limite_superior = num_ocorrencias
+
+    numero_aleatorio = random.randint(1, limite_superior)
+
+    return numero_aleatorio
 
 def get_data(sheet_name):
     global last_sheet
@@ -128,7 +197,7 @@ def get_data(sheet_name):
 
 def get_rows(version):
     rows = []
-    values_to_use = used_values if version == 0 else chinease_used_values
+    values_to_use = used_values if version == 0 else (chinease_used_values if version == 1 else infinity_used_values)
     for value in values_to_use:
         row = {
             'name': data['Name'].iloc[value - 1],

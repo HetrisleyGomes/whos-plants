@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% block versao %}
-Chinesa
+Infinity
 {% endblock versao %}
 {% block conteudo %}
 <div class="container">
-    <form action="/makeguess_chinease" class="form" method="post">
-        <fieldset {% if chinease_victory %} disabled {% endif %}>
+    <form action="/makeguess_infinity" class="form" method="post">
+        <fieldset {% if victory %} disabled {% endif %}>
         <div class="row align-items-center">
             <div class="col-auto">
                 <label for="guess" class="form-label">Guess</label>
             </div>
             <div class="col">
                 <!-- Associando o input ao datalist -->
-                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if chinease_victory %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()">
+                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if victory %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()">
     
                 <!-- Datalist contendo as sugestões -->
                 <datalist id="name-suggestions">
@@ -33,18 +33,23 @@ Chinesa
     </form>
 </div>
 <div class="container">
-    {% if chinease_victory %}
+    {% if victory %}
     <div style="display: inline-flex; gap: 5px;">
-        {% if number_of_trys[1] == 1 %}
+        {% if used_values|length == 1 %}
             <span class="enfase">De primeira! </span>
         {% endif %}
-        <span class="enfase">Você descobriu em {{ number_of_trys[1] }} tentativas!</span>
+        <span class="enfase">Você descobriu em {{ used_values|length }} tentativas!</span>
+    </div>
+    {% endif %}
+    {% if victory %}
+    <div style="display: inline-flex; gap: 5px;">
+        <a href="{{ url_for('main_bp.reset_infinity') }}"><button class="btn btn-reset">Nova planta</button></a>
     </div>
     {% endif %}
     <div class="text-white">
         <div class="row">
             <div class="col">
-                {% if chinease_victory or used_values|length >= 5 %}
+                {% if victory or used_values|length >= 5 %}
                 <details>
                     <summary>Plant Food Effect</summary>
                     <p>{{data['Plant Food Effect'][rand-1]}}</p>
@@ -53,7 +58,7 @@ Chinesa
                     <p class="faded">Plant Food Effect após {{ 5 - used_values|length }} tentativas. </p>
                 {% endif %}</div>
             <div class="col">
-                {% if chinease_victory or used_values|length >= 10 %}
+                {% if victory or used_values|length >= 10 %}
                 <details>
                     <summary>Description Effect</summary>
                     <p>{{data['Description'][rand-1]}}</p>
@@ -63,9 +68,7 @@ Chinesa
                 {% endif %}
             </div>
         </div>
-        
     </div>
-    
     {% if victory == True and chinease_victory == True %} 
         <div class="container whiteboard">
             <div class="area-results">
@@ -102,7 +105,6 @@ Chinesa
             <th>Raridade</th>
             <th>Tipo de planta</th>
             <th>Origem</th>
-            <th>Classificação</th>
         </thead>
         {% for row in rows %}
             <tr>
@@ -175,7 +177,6 @@ Chinesa
                 <td class="{{ 'background-verde' if row.rarity == data['Rarity'][rand-1] else 'background-vermelho' }}">{{ row.rarity }}</td>
                 <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
                 <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
-                <td class="{{ 'background-verde' if row.classification == data['Classification'][rand-1] else 'background-vermelho' }}">{{ row.classification }}</td>
             </tr>
         {% endfor %}
     </table>

@@ -38,7 +38,7 @@ Global
         {% if number_of_trys[0] == 1 %}
             <span class="enfase">De primeira! </span>
         {% endif %}
-        <span class="enfase">Você descobriu em {{ number_of_trys[1] }} tentativas!</span>
+        <span class="enfase">Você descobriu em {{ number_of_trys[0] }} tentativas!</span>
     </div>
     {% endif %}
     <div class="text-white">
@@ -63,10 +63,27 @@ Global
                 {% endif %}
             </div>
         </div>
-        
     </div>
-    
-
+    {% if victory == True and chinease_victory == True %} 
+        <div class="container whiteboard">
+            <div class="area-results">
+                <span class="victory">Victory!</span>
+                <hr>
+                <div class="victory-box">
+                    <p>Você acertou todas as plantas!</p>
+                    <p>Seu placar é de:</p>
+                    <p>
+                        <ul>
+                            <li><span>PvZ Internacional:</span> <span>{{number_of_trys[0]}}</span></li>
+                            <li><span>Pvz Chinease:</span> <span>{{number_of_trys[1]}}</span></li>
+                        </ul>
+                    </p>
+                </div>
+                <br>
+                <span class="enfase" style="color: var(--main-color);">Muito bem!</span>
+            </div>
+        </div>
+    {% endif %}
 </div>
 <hr>
 

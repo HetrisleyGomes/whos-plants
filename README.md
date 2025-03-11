@@ -72,16 +72,24 @@ git clone https://github.com/seu-usuario/whos-plants.git
 ```bash
 cd whos-plants
 ```
-3. Instale as dependências:
+3. (Opcional) Crie um ambiente virtual para não interferir em outros programas:
+```bash
+pip venv .venv
+```
+- Então entre no ambiente virtual:
+```bash
+.\venv\Scripts\activate
+```
+4. Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
-4. Execute o servidor Flask:
+5. Execute o servidor Flask:
 ```bash
 python run.py
 ```
 
-5. Abra seu navegador e vá até http://127.0.0.1:5000/ para jogar.
+6. Abra seu navegador e vá até http://127.0.0.1:5000/ para jogar.
 
 ## 📁 Estrutura de Pastas
 Aqui está a estrutura de pastas do projeto para facilitar a compreensão:
@@ -124,8 +132,9 @@ whos-plants/
 - **Tabela de Palpites**: Uma tabela com seus palpites anteriores e a comparação de cada característica.
 
 ### Modos Atuais
-- Modo "Planta da versão Global": Tente adivinhar a planta da versão de Plants vs Zombies 2.
+- Modo "Planta da versão Global": Tente adivinhar a planta da versão internacional de Plants vs Zombies 2.
 - Modo "Planta da versão chinesa": Tente adivinhar a planta da versão chinesa de Plants vs Zombies 2.
+- Modo "Plantas Infinitas": Tente adivinhar quantas plantas quiser da versão internacional de Plants vs Zombies 2.
 
 ### Funcionalidades Futuras
 - Adicionar informações sobre quantas pessoas acertaram a planta do dia.

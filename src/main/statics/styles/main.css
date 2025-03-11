@@ -9,10 +9,15 @@
     --light-color: #f0ffff;
     --border-color: #da9359;
     --scarlet-color: #b81c1c;
+    --golden-color: #ecea44;
 }
 *{
     font-family: Roboto, Arial, Helvetica, sans-serif;
     cursor: default;
+}
+body {
+    background: linear-gradient(to bottom, #9c5645, rgb(63, 42, 26));
+    min-height: 100vh;
 }
 
 /* ---> VERSION <--- */
@@ -33,6 +38,25 @@
     .btn-guess, ul li a:hover {
         background-color: var(--red-second-color);
     };
+}
+
+.infinity-thamed {
+    header {
+        background: linear-gradient(to right, var(--main-color), var(--second-color));
+        border-bottom: var(--golden-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--golden-color);
+    }
+    tr {
+        border: var(--golden-color) 2px solid;
+        td {
+            border: var(--golden-color) 1px solid;
+        }
+    }
+    thead th {
+        border: var(--golden-color) 1px solid;
+    }
 }
 
 
@@ -81,6 +105,35 @@ main, .container {
     margin-right: auto;
     margin-left: auto;
     padding: 1vh 1vw;
+}
+.whiteboard{
+    margin-top: 2vh;
+    background-color: var(--light-color);
+    border: var(--gray-color) 3px solid;
+    border-radius: 10px;
+    display: inline-flex;
+    justify-content: center;
+}
+.area-results{
+    color: var(--btn-color);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 1vh 3vw;
+    text-align: center;
+}
+.victory-box {
+    display: grid;
+    gap: 1vh;
+    & ul {
+        color: var(--gray-color);
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        & li {
+            padding: 0.5vh 0;
+        }
+    }
 }
 /* fim das ÁREAS */
 
@@ -153,6 +206,27 @@ main, .container {
     margin: auto;
     padding: 1vh 1vw;
 }
+.btn-reset {
+    background-color: var(--main-color);
+    color: var(--light-color);
+    border-radius: 7px;
+    text-align: center;
+    font-size: 16px;
+    margin: auto;
+    padding: .5vh 1vw;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+.btn-reset:hover{
+    color: var(--light-color);
+    background-color: #008f1f;
+}
+.victory{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    padding: 2vh 2vw;
+}
 /* fim dos TEXTS */
 
 /* Inicio TABLES*/
@@ -192,14 +266,8 @@ input[type="text"] {
     position: relative;
 }
 
-
-/* Pode também estilizar as opções do datalist */
 datalist option {
     padding: 8px;
     font-size: 14px;
 }
 
-body {
-    background: linear-gradient(to bottom, #9c5645, rgb(63, 42, 26));
-    min-height: 100vh;
-}
