@@ -175,7 +175,7 @@ Global
                 <td class="{{ 'background-verde' if row.rarity == data['Rarity'][rand-1] else 'background-vermelho' }}">{{ row.rarity }}</td>
                 <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
                 <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
-                <td>{{ row.appearances }}</td>
+                <td class="{{row.background}}">{{ row.appearances }}</td>               
             </tr>
         {% endfor %}
     </table>

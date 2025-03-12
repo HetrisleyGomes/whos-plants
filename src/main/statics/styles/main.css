@@ -10,6 +10,8 @@
     --border-color: #da9359;
     --scarlet-color: #b81c1c;
     --golden-color: #ecea44;
+    --amarelo-color: #e0e002;
+    --amarelo-second-color: #727205;
 }
 *{
     font-family: Roboto, Arial, Helvetica, sans-serif;
@@ -255,9 +257,17 @@ thead th {
     background-color: var(--main-color) !important ;
     color: var(--second-color);
 }
+.background-amarelo{
+    background-color: var(--amarelo-color) !important ;
+    color: var(--amarelo-second-color);
+}
 .icone {
     font-size: 20px;
     opacity: 0.9;
+}
+
+.c-table{
+    display: table;
 }
 /* fim dos TABLES */
 

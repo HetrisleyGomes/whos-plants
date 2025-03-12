@@ -229,12 +229,9 @@ def get_rows(version):
             'origin': data['Origin'].iloc[value - 1],
             'classification': data['Classification'].iloc[value - 1],
             'appearances': data['Appearances'].iloc[value - 1],
+            'background': get_background(data['Appearances'].iloc[value - 1]),
             'img_link': data['img_link'].iloc[value - 1],
         }
-        print(f'''
-IMAGEN LINKS
-            {data['Name'].iloc[value - 1]}:  {data['img_link'].iloc[value - 1]}
-''')
         rows.append(row)
     rows.reverse()
     
@@ -256,6 +253,7 @@ def get_all():
             'origin': value['Origin'],
             'classification': value['Classification'],
             'appearances': value['Appearances'],
+            'background-appearances': get_background(value['Appearances']),
             'img_link': value['img_link'],
         }
         rows.append(row)
@@ -274,6 +272,18 @@ def proxy_image():
     
     return "Imagem não encontrada", 404
 
+def get_background(values):
+    print('VEIOv -=----=-=-==-==-')
+    row_aparicoes = [appearance.strip() for appearance in values.split(',')]
+    data_aparicoes = [appearance.strip() for appearance in data['Appearances'][rand-1].split(',')]
+
+    if set(row_aparicoes) == set(data_aparicoes):
+        return 'background-verde'
+    # Verificar se existe alguma correspondência
+    if any(appearance in data_aparicoes for appearance in row_aparicoes):
+        return 'background-amarelo'
+    # Se não houver nenhuma correspondência
+    return 'background-vermelho'
 
 if last_sheet == '':
     last_sheet = 'Database'

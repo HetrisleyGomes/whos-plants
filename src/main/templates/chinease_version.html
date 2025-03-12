@@ -47,7 +47,7 @@ Chinesa
                 {% if chinease_victory or used_values|length >= 5 %}
                 <details>
                     <summary>Plant Food Effect</summary>
-                    <p>{{data['Plant Food Effect'][rand-1]}}</p>
+                    <p>{{ data['Plant Food Effect'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
                 </details>
                 {% else %}
                     <p class="faded">Plant Food Effect após {{ 5 - used_values|length }} tentativas. </p>
@@ -56,7 +56,7 @@ Chinesa
                 {% if chinease_victory or used_values|length >= 10 %}
                 <details>
                     <summary>Description Effect</summary>
-                    <p>{{data['Description'][rand-1]}}</p>
+                    <p>{{ data['Description'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
                 </details>
                 {% else %}
                     <p class="faded">Descrição após {{ 10 - used_values|length }} tentativas. </p>
@@ -89,9 +89,10 @@ Chinesa
 </div>
 <hr>
 
-<div class="container">
+<div class="container c-table">
     <table class="table">
         <thead>
+            <th><strong>Guess</strong></th>
             <th>Nome</th>
             <th>Família</th>
             <th>Custo de sóis</th>
@@ -103,9 +104,11 @@ Chinesa
             <th>Tipo de planta</th>
             <th>Origem</th>
             <th>Classificação</th>
+            <th>Aparições</th>
         </thead>
         {% for row in rows %}
             <tr>
+                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}"><img src="{{ url_for('main_bp.proxy_image', img_link=row.img_link) }}" alt="Imagem" class="img-plant"></td>
                 <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}">{{ row.name }}</td>
                 <td class="{{ 'background-verde' if row.type == data['Type'][rand-1] else 'background-vermelho' }}">{{ row.type }}</td>
                 <td class="{{ 'background-verde' if row.sun_cust == data['Sun Cust'][rand-1] else 'background-vermelho' }}">{{ row.sun_cust }}
@@ -176,6 +179,7 @@ Chinesa
                 <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
                 <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
                 <td class="{{ 'background-verde' if row.classification == data['Classification'][rand-1] else 'background-vermelho' }}">{{ row.classification }}</td>
+                <td class="{{row.background}}">{{ row.appearances }}</td>               
             </tr>
         {% endfor %}
     </table>
