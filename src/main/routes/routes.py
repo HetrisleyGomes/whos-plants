@@ -1,7 +1,8 @@
-from flask import render_template, url_for, request, redirect, Blueprint
+from flask import render_template, url_for, request, redirect, Blueprint, send_file
 import pandas as pd
 import random
 from datetime import datetime
+import requests
 
 main_bp = Blueprint("main_bp", __name__)
 
@@ -85,6 +86,22 @@ def infinity():
         choosed_names = infinity_choosed_names,
         rand = rand,
         victory = infinity_victory
+        )
+
+@main_bp.route("/test")
+def testes():
+    if last_sheet != 'Database':
+        global rand, data
+        rand = gerar_numero_aleatorio_random('Database')
+        data = get_data('Database')
+
+    names = data['Name'].tolist()
+
+    return render_template(
+        "test.html",
+        data = data,
+        names = names,
+        rows = get_all()
         )
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
@@ -211,11 +228,51 @@ def get_rows(version):
             'plant_origin': data['Plant_Origin'].iloc[value -1],
             'origin': data['Origin'].iloc[value - 1],
             'classification': data['Classification'].iloc[value - 1],
+            'appearances': data['Appearances'].iloc[value - 1],
+            'img_link': data['img_link'].iloc[value - 1],
         }
+        print(f'''
+IMAGEN LINKS
+            {data['Name'].iloc[value - 1]}:  {data['img_link'].iloc[value - 1]}
+''')
         rows.append(row)
     rows.reverse()
     
     return rows
+
+def get_all():
+    rows = []
+    for index, value in data.iterrows():
+        row = {
+            'name': value['Name'],
+            'type': value['Type'],
+            'sun_cust': int(value['Sun Cust']),
+            'tought': int(value['Tought']),
+            'damage': int(value['Damage']),
+            'recarga': int(value['Recarga']),
+            'rarity': value['Rarity'],
+            'usage': [value['Single use'],value['Instant use']],
+            'plant_origin': value['Plant_Origin'],
+            'origin': value['Origin'],
+            'classification': value['Classification'],
+            'appearances': value['Appearances'],
+            'img_link': value['img_link'],
+        }
+        rows.append(row)
+
+    return rows
+
+@main_bp.route("/proxy-image")
+def proxy_image():
+    img_url = request.args.get("img_link")  # Obtém o link da imagem pela query string
+    if not img_url:
+        return "URL da imagem não fornecida", 400
+    
+    response = requests.get(img_url, stream=True)
+    if response.status_code == 200:
+        return send_file(response.raw, mimetype="image/jpeg")
+    
+    return "Imagem não encontrada", 404
 
 
 if last_sheet == '':

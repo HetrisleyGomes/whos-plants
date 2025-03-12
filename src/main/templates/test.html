@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block versao %}
+Testes
+{% endblock versao %}
+{% block conteudo %}
+{{ rows[0] }}
+<table class="table">
+    {% for plant in rows %}
+        <tr>
+            <td>{{plant['name']}}</td>
+            <td>{{plant['type']}}</td>
+            <td>{{plant['sun_cust']}}</td>
+            <td>{{plant['tought']}}</td>
+            <td>{{plant['damage']}}</td>
+            <td>{{plant['recarga']}}</td>
+            <td>{{plant['rarity']}}</td>
+            <td>{{plant['usage']}}</td>
+            <td>{{plant['plant_origin']}}</td>
+            <td>{{plant['origin']}}</td>
+            <td>{{plant['classification']}}</td>
+            <td>{{plant['appearances']}}</td>
+            <td><img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="img-plant"></td>
+        </tr>
+    {% endfor %}
+    
+</table>
+{% endblock conteudo %}

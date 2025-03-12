@@ -90,6 +90,7 @@ Global
 <div class="container">
     <table class="table">
         <thead>
+            <th><strong>Guess</strong></th>
             <th>Nome</th>
             <th>Família</th>
             <th>Custo de sóis</th>
@@ -100,9 +101,11 @@ Global
             <th>Raridade</th>
             <th>Tipo de planta</th>
             <th>Origem</th>
+            <th>Aparições</th>
         </thead>
         {% for row in rows %}
             <tr>
+                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}"><img src="{{ url_for('main_bp.proxy_image', img_link=row.img_link) }}" alt="Imagem" class="img-plant"></td>
                 <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}">{{ row.name }}</td>
                 <td class="{{ 'background-verde' if row.type == data['Type'][rand-1] else 'background-vermelho' }}">{{ row.type }}</td>
                 <td class="{{ 'background-verde' if row.sun_cust == data['Sun Cust'][rand-1] else 'background-vermelho' }}">{{ row.sun_cust }}
@@ -172,6 +175,7 @@ Global
                 <td class="{{ 'background-verde' if row.rarity == data['Rarity'][rand-1] else 'background-vermelho' }}">{{ row.rarity }}</td>
                 <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
                 <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
+                <td>{{ row.appearances }}</td>
             </tr>
         {% endfor %}
     </table>

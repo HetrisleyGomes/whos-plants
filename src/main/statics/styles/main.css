@@ -261,6 +261,14 @@ thead th {
 }
 /* fim dos TABLES */
 
+/* Inicio das IMAGENS */
+.img-plant{
+    width: 98px;
+    height: 98px;
+}
+/* fim das IMAGENS */
+
+
 /* Garante que o datalist apareça logo abaixo do input */
 input[type="text"] {
     position: relative;

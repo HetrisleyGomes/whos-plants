@@ -1,7 +1,7 @@
 # Who's Plants
 "**Who's Plants?**" é um jogo inspirado no universo de Plants vs Zombies. A cada dia, uma planta aleatória é escolhida como a "planta do dia", e o jogador deve tentar adivinhar qual é, baseando-se nas suas características. O jogo compara o palpite do jogador com a planta do dia e mostra se o valor de cada característica está correto ou não.
 
-![Tela Inicial](caminho/para/a/imagem1.png)
+![Tela Inicial](./src/main/statics/images/game_example.png)
 
 ### Badges
 <p align="center">
@@ -15,19 +15,30 @@
 
 ## Índice
 
-* [Who's Plants?](#who's-plants)
-* [Badges](#badges)
-* [Índice](#índice)
-* [Descrição](#descrição)
-* [Informações](#🛠️-informações)
-* [Uso](#🎲-uso)
-* [Estrutura de Pastas](#📁-estrutura-de-pastas)
-* [Como Jogar](#👾-como-jogar)
-* [Tecnologias](#⚙️-tecnologias-usadas)
-* [Contribuindo](#💡-contribuindo)
-* [Contatos](#contatos)
-* [Licença](#licença)
-* [Créditos](#créditos)
+- [Who's Plants](#whos-plants)
+		- [Badges](#badges)
+	- [Índice](#índice)
+	- [Descrição](#descrição)
+		- [Status do Projeto](#status-do-projeto)
+	- [🛠️ Informações](#️-informações)
+		- [Dependências](#dependências)
+			- [As dependências incluem:](#as-dependências-incluem)
+	- [🎲 Uso](#-uso)
+		- [Pré-requisitos](#pré-requisitos)
+		- [Instalação](#instalação)
+	- [📁 Estrutura de Pastas](#-estrutura-de-pastas)
+	- [👾 Como Jogar](#-como-jogar)
+		- [Tela Principal](#tela-principal)
+		- [Modos Atuais](#modos-atuais)
+		- [Funcionalidades Futuras](#funcionalidades-futuras)
+	- [⚙️ Tecnologias Usadas](#️-tecnologias-usadas)
+		- [Frontend](#frontend)
+		- [Backend](#backend)
+		- [Banco de Dados](#banco-de-dados)
+	- [💡 Contribuindo](#-contribuindo)
+	- [Contato](#contato)
+	- [Licença](#licença)
+	- [Créditos](#créditos)
 
 
 ## Descrição
@@ -66,7 +77,7 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 ### Instalação
 1. Clone este repositório:
 ```bash
-git clone https://github.com/seu-usuario/whos-plants.git
+git clone https://github.com/HetrisleyGomes/whos-plants.git
 ```
 2. Acesse o diretório do projeto:
 ```bash
@@ -74,7 +85,7 @@ cd whos-plants
 ```
 3. (Opcional) Crie um ambiente virtual para não interferir em outros programas:
 ```bash
-pip venv .venv
+python -m venv .venv
 ```
 - Então entre no ambiente virtual:
 ```bash
