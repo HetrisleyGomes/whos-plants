@@ -2,6 +2,7 @@
     /* Cores */
     --main-color: #00A629;
     --second-color: #013003;
+    --bold-color: #008f1f;
     --red-color: #ec6161;
     --red-second-color: #800000;
     --btn-color: #013B6C;
@@ -26,6 +27,7 @@ body {
 .chinease-thamed {
     header {
         background-color: var(--scarlet-color);
+        border-bottom: var(--golden-color) 5px solid;
     };
     .form-control {
         border-color: var(--red-second-color);
@@ -40,6 +42,9 @@ body {
     .btn-guess, ul li a:hover {
         background-color: var(--red-second-color);
     };
+    .area-results {
+        background-image: linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color)), linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color));
+    }
 }
 
 .infinity-thamed {
@@ -60,7 +65,36 @@ body {
         border: var(--golden-color) 1px solid;
     }
 }
-
+.all-thamed{
+    header {
+        background: var(--btn-color);
+        border-bottom: var(--main-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--second-color);
+    }
+    tr {
+        border: var(--second-color) 2px solid;
+        td {
+            border: var(--second-color) 1px solid;
+        }
+    }
+    thead th {
+        background-color: var(--main-color);
+        border: var(--bold-color) 1px solid;
+    }
+    .text-white {
+        color: var(--main-color) !important;
+        .faded {
+            font-weight: 700;
+            opacity: 0.6;
+        };
+        summary {
+            font-weight: 700;
+        }
+    }
+}
+/* ---> fim dos THAMED <--- */
 
 /* ---> HEADER <---*/
 header {
@@ -96,7 +130,7 @@ ul li a {
 }
 
 ul li a:hover {
-    background-color: #008f1f;  /* Tom mais escuro de verde */
+    background-color: var(--bold-color);  /* Tom mais escuro de verde */
     transform: scale(1.05);  /* Leve aumento do tamanho */
     color: var(--light-color);
 }
@@ -118,11 +152,47 @@ main, .container {
 }
 .area-results{
     color: var(--btn-color);
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     padding: 1vh 3vw;
     text-align: center;
+    border-radius: 10px;
+	overflow: hidden;
+    z-index: 0;
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -50%;
+		width: 200%;
+		height: 200%;
+		background-color: var(--bold-color);
+		background-repeat: no-repeat;
+		background-size: 50% 50%, 50% 50%;
+		background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+		background-image: linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color)), linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color));
+		animation: rotate 4s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 6px;
+		top: 6px;
+		width: calc(100% - 12px);
+		height: calc(100% - 12px);
+		background: white;
+		border-radius: 5px;
+	}
+}
+@keyframes rotate {
+	100% {
+		transform: rotate(1turn);
+	}
 }
 .victory-box {
     display: grid;
@@ -221,13 +291,17 @@ main, .container {
 }
 .btn-reset:hover{
     color: var(--light-color);
-    background-color: #008f1f;
+    background-color: var(--bold-color);
 }
 .victory{
     text-align: center;
     font-size: 30px;
     font-weight: 800;
     padding: 2vh 2vw;
+}
+.minimal{
+    font-size: 10px;
+    font-weight: 200;
 }
 /* fim dos TEXTS */
 

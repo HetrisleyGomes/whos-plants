@@ -4,15 +4,16 @@ Chinesa
 {% endblock versao %}
 {% block conteudo %}
 <div class="container">
-    <form action="/makeguess_chinease" class="form" method="post">
-        <fieldset {% if chinease_victory %} disabled {% endif %}>
+    <form action="/makeguess" class="form" method="post">
+        <input type="hidden" name="id" value="1">
+        <fieldset {% if victory[1] %} disabled {% endif %}>
         <div class="row align-items-center">
             <div class="col-auto">
                 <label for="guess" class="form-label">Guess</label>
             </div>
             <div class="col">
                 <!-- Associando o input ao datalist -->
-                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if chinease_victory %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()">
+                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if victory[1] %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()" required>
     
                 <!-- Datalist contendo as sugestões -->
                 <datalist id="name-suggestions">
@@ -33,7 +34,7 @@ Chinesa
     </form>
 </div>
 <div class="container">
-    {% if chinease_victory %}
+    {% if victory[1] %}
     <div style="display: inline-flex; gap: 5px;">
         {% if number_of_trys[1] == 1 %}
             <span class="enfase">De primeira! </span>
@@ -44,7 +45,7 @@ Chinesa
     <div class="text-white">
         <div class="row">
             <div class="col">
-                {% if chinease_victory or used_values|length >= 5 %}
+                {% if victory[1] or used_values|length >= 5 %}
                 <details>
                     <summary>Plant Food Effect</summary>
                     <p>{{ data['Plant Food Effect'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
@@ -53,7 +54,7 @@ Chinesa
                     <p class="faded">Plant Food Effect após {{ 5 - used_values|length }} tentativas. </p>
                 {% endif %}</div>
             <div class="col">
-                {% if chinease_victory or used_values|length >= 10 %}
+                {% if victory[1] or used_values|length >= 10 %}
                 <details>
                     <summary>Description Effect</summary>
                     <p>{{ data['Description'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
@@ -66,7 +67,7 @@ Chinesa
         
     </div>
     
-    {% if victory == True and chinease_victory == True %} 
+    {% if victory[0] == True and victory[1] == True %} 
         <div class="container whiteboard">
             <div class="area-results">
                 <span class="victory">Victory!</span>

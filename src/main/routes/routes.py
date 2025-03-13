@@ -10,18 +10,13 @@ main_bp = Blueprint("main_bp", __name__)
 file_path = 'data/PVZ.xlsx'
 last_sheet = ''
 
-used_values = []
-choosed_names = []
-chinease_used_values = []
-chinease_choosed_names = []
+used_values = [[],[],[],[]]
+choosed_names = [[],[],[],[]]
 
-infinity_used_values = []
-infinity_choosed_names = []
+victory = [False, False, False, False]
+number_of_trys = [0,0,0,0]
 
-victory = False
-chinease_victory = False
-infinity_victory = False
-number_of_trys = [0,0,0]
+infinity_number = 999
 
 @main_bp.route("/")
 @main_bp.route("/index")
@@ -38,11 +33,10 @@ def index():
         data = data,
         names = names,
         rows = get_rows(0),
-        used_values = used_values,
-        choosed_names = choosed_names,
+        used_values = used_values[0],
+        choosed_names = choosed_names[0],
         rand = rand,
         victory = victory,
-        chinease_victory = chinease_victory,
         number_of_trys = number_of_trys
         )
 
@@ -60,21 +54,44 @@ def chinease():
         data = data,
         names = names,
         rows = get_rows(1),
-        used_values = chinease_used_values,
-        choosed_names = chinease_choosed_names,
+        used_values = used_values[1],
+        choosed_names = choosed_names[1],
         rand = rand,
         victory = victory,
-        chinease_victory = chinease_victory,
+        number_of_trys = number_of_trys
+        )
+
+@main_bp.route("/all")
+def all():
+    if last_sheet != 'All_data':
+        global rand, data
+        rand = gerar_numero_aleatorio('All_data')
+        data = get_data('All_data')
+
+    names = data['Name'].tolist()
+
+    return render_template(
+        "all_mode.html",
+        data = data,
+        names = names,
+        rows = get_rows(2),
+        used_values = used_values[2],
+        choosed_names = choosed_names[2],
+        rand = rand,
+        victory = victory,
         number_of_trys = number_of_trys
         )
 
 @main_bp.route("/infinity")
 def infinity():
+    global rand, data, infinity_number
     if last_sheet != 'Database':
-        global rand, data
-        rand = gerar_numero_aleatorio_random('Database')
         data = get_data('Database')
-
+    if infinity_number == 999:
+        rand = gerar_numero_aleatorio_random('Database')
+        infinity_number = rand
+    
+    print(infinity_number)
     names = data['Name'].tolist()
 
     return render_template(
@@ -82,18 +99,19 @@ def infinity():
         data = data,
         names = names,
         rows = get_rows(9),
-        used_values = infinity_used_values,
-        choosed_names = infinity_choosed_names,
+        used_values = used_values[len(used_values)-1],
+        choosed_names = choosed_names[len(choosed_names)-1],
         rand = rand,
-        victory = infinity_victory
+        victory = victory[len(victory)-1]
         )
 
 @main_bp.route("/test")
 def testes():
     if last_sheet != 'Database':
-        global rand, data
-        rand = gerar_numero_aleatorio_random('Database')
         data = get_data('Database')
+
+    global rand
+    rand = gerar_numero_aleatorio_random('Database')
 
     names = data['Name'].tolist()
 
@@ -106,52 +124,35 @@ def testes():
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
 def guesser():
+    id = int(request.form.get("id"))
     guess = request.form.get('guess')
-    print(guess.capitalize())
     item = data[data['Name'].str.lower() == guess.lower()]
+
     global victory
-    used_values.append(int(item['ID'].iloc[0]))
-    choosed_names.append(item['Name'].iloc[0])
+    used_values[id].append(int(item['ID'].iloc[0]))
+    choosed_names[id].append(item['Name'].iloc[0])
+
     if data['Name'][rand-1] == item['Name'].iloc[0]:
-        victory = True
-        number_of_trys[0] = used_values.__len__()
+        victory[id] = True
+        number_of_trys[id] = used_values[id].__len__()
 
-    return redirect(url_for('main_bp.index'))
-    
-@main_bp.route("/makeguess_chinease", methods=["GET","POST"])
-def guesser_chinease():
-    guess = request.form.get('guess')
-    print(guess.capitalize())
-    item = data[data['Name'].str.lower() == guess.lower()]
-    global chinease_victory
-    chinease_used_values.append(int(item['ID'].iloc[0]))
-    chinease_choosed_names.append(item['Name'].iloc[0])
-    if data['Name'][rand-1] == item['Name'].iloc[0]:
-        chinease_victory = True
-        number_of_trys[1] = chinease_used_values.__len__()
-
-    return redirect(url_for('main_bp.chinease'))
-
-@main_bp.route("/makeguess_infinity", methods=["GET","POST"])
-def guesser_infinity():
-    guess = request.form.get('guess')
-    print(guess.capitalize())
-    item = data[data['Name'].str.lower() == guess.lower()]
-    global infinity_victory
-    infinity_used_values.append(int(item['ID'].iloc[0]))
-    infinity_choosed_names.append(item['Name'].iloc[0])
-    if data['Name'][rand-1] == item['Name'].iloc[0]:
-        infinity_victory = True
-    return redirect(url_for('main_bp.infinity'))
-
+    if id == 0:
+        return redirect(url_for('main_bp.index'))
+    elif id ==1:
+        return redirect(url_for('main_bp.chinease'))
+    elif id ==2:
+        return redirect(url_for('main_bp.all'))
+    else:
+        return redirect(url_for('main_bp.infinity'))
+   
 @main_bp.route("/reset_infinity")
 def reset_infinity():
     global rand
     rand = gerar_numero_aleatorio_random('Database')
-    global infinity_victory
-    infinity_used_values.clear()
-    infinity_choosed_names.clear()
-    infinity_victory = False
+    global victory
+    used_values[len(victory)-1].clear()
+    choosed_names[len(victory)-1].clear()
+    victory[len(victory)-1] = False
     return redirect(url_for('main_bp.infinity'))
 
 
@@ -214,7 +215,7 @@ def get_data(sheet_name):
 
 def get_rows(version):
     rows = []
-    values_to_use = used_values if version == 0 else (chinease_used_values if version == 1 else infinity_used_values)
+    values_to_use = used_values[0] if version == 0 else (used_values[1] if version == 1 else (used_values[2] if version == 2 else used_values[len(used_values)-1]))
     for value in values_to_use:
         row = {
             'name': data['Name'].iloc[value - 1],
@@ -273,7 +274,6 @@ def proxy_image():
     return "Imagem não encontrada", 404
 
 def get_background(values):
-    print('VEIOv -=----=-=-==-==-')
     row_aparicoes = [appearance.strip() for appearance in values.split(',')]
     data_aparicoes = [appearance.strip() for appearance in data['Appearances'][rand-1].split(',')]
 

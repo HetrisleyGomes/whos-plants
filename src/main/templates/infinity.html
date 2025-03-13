@@ -4,7 +4,8 @@ Infinity
 {% endblock versao %}
 {% block conteudo %}
 <div class="container">
-    <form action="/makeguess_infinity" class="form" method="post">
+    <form action="/makeguess" class="form" method="post">
+        <input type="hidden" name="id" value="3">
         <fieldset {% if victory %} disabled {% endif %}>
         <div class="row align-items-center">
             <div class="col-auto">
@@ -12,7 +13,7 @@ Infinity
             </div>
             <div class="col">
                 <!-- Associando o input ao datalist -->
-                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if victory %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()">
+                <input type="text" class="form-control" id="guess" name="guess" list="name-suggestions" aria-describedby="Guess" {% if victory %} value="{{data['Name'][rand-1]}}" {% else %} autofocus {% endif %} oninput="validateInput()" required>
     
                 <!-- Datalist contendo as sugestões -->
                 <datalist id="name-suggestions">
@@ -52,7 +53,7 @@ Infinity
                 {% if victory or used_values|length >= 5 %}
                 <details>
                     <summary>Plant Food Effect</summary>
-                    <p>{{data['Plant Food Effect'][rand-1]}}</p>
+                    <p>{{ data['Plant Food Effect'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
                 </details>
                 {% else %}
                     <p class="faded">Plant Food Effect após {{ 5 - used_values|length }} tentativas. </p>
@@ -61,7 +62,7 @@ Infinity
                 {% if victory or used_values|length >= 10 %}
                 <details>
                     <summary>Description Effect</summary>
-                    <p>{{data['Description'][rand-1]}}</p>
+                    <p>{{ data['Description'][rand-1] | replace(data['Name'][rand-1], 'Esta planta') }}</p>
                 </details>
                 {% else %}
                     <p class="faded">Descrição após {{ 10 - used_values|length }} tentativas. </p>
@@ -92,7 +93,7 @@ Infinity
 </div>
 <hr>
 
-<div class="container">
+<div class="container c-table">
     <table class="table">
         <thead>
             <th>Nome</th>
