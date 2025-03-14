@@ -1,11 +1,13 @@
 from flask import render_template, url_for, request, redirect, Blueprint, send_file
 import pandas as pd
 import random
+import hashlib
 from datetime import datetime
 import requests
+import os
 
 main_bp = Blueprint("main_bp", __name__)
-
+CACHE_DIR = 'cache'
 
 file_path = 'data/PVZ.xlsx'
 last_sheet = ''
@@ -263,15 +265,44 @@ def get_all():
 
 @main_bp.route("/proxy-image")
 def proxy_image():
-    img_url = request.args.get("img_link")  # Obtém o link da imagem pela query string
-    if not img_url:
-        return "URL da imagem não fornecida", 400
+    #img_url = request.args.get("img_link")  # Obtém o link da imagem pela query string
+    #if not img_url:
+    #    return "URL da imagem não fornecida", 400
+    #
+    #response = requests.get(img_url, stream=True)
+    #if response.status_code == 200:
+    #    return send_file(response.raw, mimetype="image/jpeg")
+    #
+    #return "Imagem não encontrada", 404
+    image_url = request.args.get("img_link")  # Substitua pelo link real da imagem
+
+    # Baixa a imagem ou retorna a versão do cache
+    cached_image = download_image(image_url)
+
+    # Retorna a imagem do cache
+    return send_file(cached_image, mimetype='image/jpeg')
+
+def get_cache_filename(url):
+    """Gera um nome único para o arquivo a partir da URL da imagem (usando hash)."""
+    return os.path.join(CACHE_DIR, hashlib.md5(url.encode('utf-8')).hexdigest())
+
+def download_image(url):
+    """Baixa a imagem de um link externo e a armazena no cache local."""
+    cache_filename = get_cache_filename(url)
+
+    if not os.path.exists(cache_filename):
+        # Se a imagem não estiver no cache, baixe-a
+        print(f"Baixando a imagem de {url}")
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            # Salva a imagem no cache
+            with open(cache_filename, 'wb') as f:
+                f.write(response.content)
+        else:
+            raise Exception(f"Erro ao baixar a imagem: {response.status_code}")
     
-    response = requests.get(img_url, stream=True)
-    if response.status_code == 200:
-        return send_file(response.raw, mimetype="image/jpeg")
-    
-    return "Imagem não encontrada", 404
+    return cache_filename
 
 def get_background(values):
     row_aparicoes = [appearance.strip() for appearance in values.split(',')]
@@ -284,6 +315,9 @@ def get_background(values):
         return 'background-amarelo'
     # Se não houver nenhuma correspondência
     return 'background-vermelho'
+
+if not os.path.exists(CACHE_DIR):
+    os.makedirs(CACHE_DIR)
 
 if last_sheet == '':
     last_sheet = 'Database'

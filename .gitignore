@@ -173,4 +173,5 @@ cython_debug/
 =======
 /.venv
 /.vscode
+/cache/*
 >>>>>>> master
