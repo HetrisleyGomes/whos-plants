@@ -219,13 +219,17 @@ def get_rows(version):
     rows = []
     values_to_use = used_values[0] if version == 0 else (used_values[1] if version == 1 else (used_values[2] if version == 2 else used_values[len(used_values)-1]))
     for value in values_to_use:
+        sun_cust = data['Sun Cust'].iloc[value - 1]
+        tought = data['Tought'].iloc[value - 1]
+        damage = data['Damage'].iloc[value - 1]
+        recarga = data['Recarga'].iloc[value - 1]
         row = {
             'name': data['Name'].iloc[value - 1],
             'type': data['Type'].iloc[value - 1],
-            'sun_cust': int(data['Sun Cust'].iloc[value - 1]),
-            'tought': int(data['Tought'].iloc[value - 1]),
-            'damage': int(data['Damage'].iloc[value - 1]),
-            'recarga': int(data['Recarga'].iloc[value - 1]),
+            'sun_cust': int(sun_cust) if sun_cust.is_integer() else sun_cust,
+            'tought': int(tought) if tought.is_integer() else tought,
+            'damage': int(damage) if damage.is_integer() else damage,
+            'recarga': int(recarga) if recarga.is_integer() else recarga,
             'rarity': data['Rarity'].iloc[value - 1],
             'usage': [data['Single use'].iloc[value - 1],data['Instant use'].iloc[value - 1]],
             'plant_origin': data['Plant_Origin'].iloc[value -1],
