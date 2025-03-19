@@ -1,0 +1,24 @@
+.img-container-mode{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    height: 36vh;
+    width: 22vw;
+    padding: 1vh 1vw;
+    margin: auto;
+    border-radius: 2vw;
+    border: var(--light-color) 5px solid;
+    background-color: var(--border-color);
+    margin-bottom: 1vh;
+}
+.img-container-mode > img{
+    width: 25vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 98%; /* As imagens terão o mesmo tamanho da div (500px x 500px) */
+    height: 98%;
+    border-radius: 3vw;
+    border: var(--light-color) 2px solid;
+}

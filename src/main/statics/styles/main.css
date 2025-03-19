@@ -67,6 +67,35 @@ body {
 }
 .all-thamed{
     header {
+        background: var(--second-color);
+        border-bottom: var(--main-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--second-color);
+    }
+    tr {
+        border: var(--second-color) 2px solid;
+        td {
+            border: var(--second-color) 1px solid;
+        }
+    }
+    thead th {
+        background-color: var(--main-color);
+        border: var(--bold-color) 1px solid;
+    }
+    .text-white {
+        color: var(--main-color) !important;
+        .faded {
+            font-weight: 700;
+            opacity: 0.6;
+        };
+        summary {
+            font-weight: 700;
+        }
+    }
+}
+.img-thamed{
+    header {
         background: var(--btn-color);
         border-bottom: var(--main-color) 5px solid;
     };
@@ -104,6 +133,7 @@ header {
     margin-bottom: 2vh;
 }
 .image-logo {
+    margin: 5% 0;
     width: 80px;
     height: 80px;
     transition: transform 0.2s ease;
@@ -161,6 +191,8 @@ main, .container {
     border-radius: 10px;
 	overflow: hidden;
     z-index: 0;
+    width: 22vw;
+    height: 36vh;
 	&::before {
 		content: '';
 		position: absolute;
@@ -205,6 +237,18 @@ main, .container {
         & li {
             padding: 0.5vh 0;
         }
+    }
+}
+.btns-area {
+    & ul {
+        display: grid;
+        grid: 50px / auto auto;
+        justify-content: center;
+    }
+    & a {
+        width: 100px;
+        height: 50px;
+        text-align: center;
     }
 }
 /* fim das ÁREAS */
