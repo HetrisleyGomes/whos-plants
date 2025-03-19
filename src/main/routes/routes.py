@@ -109,19 +109,28 @@ def infinity():
 
 @main_bp.route("/test")
 def testes():
+    global data
     if last_sheet != 'Database':
         data = get_data('Database')
-
-    global rand
-    rand = gerar_numero_aleatorio_random('Database')
-
-    names = data['Name'].tolist()
 
     return render_template(
         "test.html",
         data = data,
-        names = names,
         rows = get_all()
+        )
+
+@main_bp.route("/test/<id>")
+def testes_id(id):
+    global data
+    if last_sheet != 'Database':
+        data = get_data('Database')
+    print(type(id))
+    plant = data.iloc[int(id)]
+
+    return render_template(
+        "test.html",
+        data = data,
+        plant = plant,
         )
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
