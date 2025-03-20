@@ -5,28 +5,33 @@ import hashlib
 from datetime import datetime
 import requests
 import os
+from PIL import Image, ImageEnhance
+import io
 
 main_bp = Blueprint("main_bp", __name__)
 CACHE_DIR = 'cache'
 
 file_path = 'data/PVZ.xlsx'
 last_sheet = ''
+last_mode = 'normal'
 
-used_values = [[],[],[],[]]
-choosed_names = [[],[],[],[]]
+used_values = [[],[],[],[],[]]
+choosed_names = [[],[],[],[],[]]
 
-victory = [False, False, False, False]
-number_of_trys = [0,0,0,0]
+victory = [False, False, False, False, False]
+number_of_trys = [0,0,0,0,0]
 
 infinity_number = 999
 
 @main_bp.route("/")
 @main_bp.route("/index")
 def index():
+    global rand, data, last_mode
     if last_sheet != 'Database':
-        global rand, data
-        rand = gerar_numero_aleatorio('Database')
         data = get_data('Database')
+    if last_mode != 'normal':
+        rand = gerar_numero_aleatorio('Database')
+        last_mode = 'normal'
 
     names = data['Name'].tolist()
 
@@ -44,10 +49,11 @@ def index():
 
 @main_bp.route("/chinease")
 def chinease():
+    global rand, data, last_mode
     if last_sheet != 'Chinese_Database':
-        global rand, data
         rand = gerar_numero_aleatorio('Chinese_Database')
         data = get_data('Chinese_Database')
+        last_mode = 'chinease'
 
     names = data['Name'].tolist()
 
@@ -65,13 +71,14 @@ def chinease():
 
 @main_bp.route("/all")
 def all():
+    global rand, data, last_mode
     if last_sheet != 'All_data':
-        global rand, data
         rand = gerar_numero_aleatorio('All_data')
         data = get_data('All_data')
+        last_mode = 'all'
 
     names = data['Name'].tolist()
-
+    print(data['Name'][rand-1])
     return render_template(
         "all_mode.html",
         data = data,
@@ -84,11 +91,36 @@ def all():
         number_of_trys = number_of_trys
         )
 
-@main_bp.route("/infinity")
-def infinity():
-    global rand, data, infinity_number
+@main_bp.route("/img_guess")
+def img_guess():
+    global rand, data, last_mode
     if last_sheet != 'Database':
         data = get_data('Database')
+    if last_mode != 'image':
+        rand = gerar_numero_aleatorio_img('Database')
+        last_mode = 'image'
+
+    names = data['Name'].tolist()
+
+    return render_template(
+        "image_guess.html",
+        data = data,
+        names = names,
+        rows = get_rows(3),
+        used_values = used_values[3],
+        choosed_names = choosed_names[3],
+        used_values_len = len(used_values[3]),
+        rand = rand,
+        victory = victory,
+        number_of_trys = number_of_trys
+        )
+
+@main_bp.route("/infinity")
+def infinity():
+    global rand, data, infinity_number, last_mode
+    if last_sheet != 'Database':
+        data = get_data('Database')
+        last_mode = 'infinity'
     if infinity_number == 999:
         rand = gerar_numero_aleatorio_random('Database')
         infinity_number = rand
@@ -109,19 +141,28 @@ def infinity():
 
 @main_bp.route("/test")
 def testes():
+    global data
     if last_sheet != 'Database':
         data = get_data('Database')
-
-    global rand
-    rand = gerar_numero_aleatorio_random('Database')
-
-    names = data['Name'].tolist()
 
     return render_template(
         "test.html",
         data = data,
-        names = names,
         rows = get_all()
+        )
+
+@main_bp.route("/test/<id>")
+def testes_id(id):
+    global data
+    if last_sheet != 'Database':
+        data = get_data('Database')
+    print(type(id))
+    plant = data.iloc[int(id)]
+
+    return render_template(
+        "test.html",
+        data = data,
+        plant = plant,
         )
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
@@ -144,6 +185,8 @@ def guesser():
         return redirect(url_for('main_bp.chinease'))
     elif id ==2:
         return redirect(url_for('main_bp.all'))
+    elif id ==3:
+        return redirect(url_for('main_bp.img_guess'))
     else:
         return redirect(url_for('main_bp.infinity'))
    
@@ -186,6 +229,34 @@ def gerar_numero_aleatorio(sheet_name):
 
     return numero_aleatorio
 
+def gerar_numero_aleatorio_img(sheet_name):
+    global last_sheet
+    last_sheet = sheet_name
+    # Carregar o arquivo Excel
+    data = pd.read_excel(file_path, sheet_name=sheet_name)
+    df = data[data['Name'].notna()]  # remove apenas as linhas onde todos os valores são NaN
+
+    # Obter o número de ocorrências (número de linhas no arquivo)
+    num_ocorrencias = len(df)
+
+    # Garantir que o número de ocorrências seja no mínimo 1
+    if num_ocorrencias < 1:
+        raise ValueError("O arquivo não possui dados suficientes.")
+
+    # Usar a data atual como semente para garantir que o número não mude durante o dia
+    # Exemplo de cálculo: gerando um número a partir da data
+    data_atual = datetime.now().date()
+    semente = int(data_atual.strftime("%Y%m%d")) + 365  # Formato YYYYMMDD, ex: 20250219
+
+    # Definir o limite superior como o número de ocorrências
+    limite_superior = num_ocorrencias
+
+    # Gerar o número aleatório com base na semente
+    random.seed(semente)  # Usando a data como semente
+    numero_aleatorio = random.randint(1, limite_superior)
+
+    return numero_aleatorio
+
 def gerar_numero_aleatorio_random(sheet_name):
     global last_sheet
     last_sheet = sheet_name
@@ -217,7 +288,7 @@ def get_data(sheet_name):
 
 def get_rows(version):
     rows = []
-    values_to_use = used_values[0] if version == 0 else (used_values[1] if version == 1 else (used_values[2] if version == 2 else used_values[len(used_values)-1]))
+    values_to_use = used_values[0] if version == 0 else (used_values[1] if version == 1 else (used_values[2] if version == 2 else (used_values[3] if version == 3 else used_values[len(used_values)-1])))
     for value in values_to_use:
         sun_cust = data['Sun Cust'].iloc[value - 1]
         tought = data['Tought'].iloc[value - 1]
@@ -269,16 +340,8 @@ def get_all():
 
 @main_bp.route("/proxy-image")
 def proxy_image():
-    #img_url = request.args.get("img_link")  # Obtém o link da imagem pela query string
-    #if not img_url:
-    #    return "URL da imagem não fornecida", 400
-    #
-    #response = requests.get(img_url, stream=True)
-    #if response.status_code == 200:
-    #    return send_file(response.raw, mimetype="image/jpeg")
-    #
-    #return "Imagem não encontrada", 404
-    image_url = request.args.get("img_link")  # Substitua pelo link real da imagem
+    # Substitua pelo link real da imagem
+    image_url = request.args.get("img_link")  
 
     # Baixa a imagem ou retorna a versão do cache
     cached_image = download_image(image_url)
@@ -319,6 +382,7 @@ def get_background(values):
         return 'background-amarelo'
     # Se não houver nenhuma correspondência
     return 'background-vermelho'
+
 
 if not os.path.exists(CACHE_DIR):
     os.makedirs(CACHE_DIR)

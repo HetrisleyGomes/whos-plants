@@ -66,6 +66,27 @@ Doidão
             </div>
         </div>
     </div>
+    {% if victory[0] == True and victory[1] == True and victory[2] == True %} 
+        <div class="container whiteboard">
+            <div class="area-results">
+                <span class="victory">Victory!</span>
+                <hr>
+                <div class="victory-box">
+                    <p>Você acertou todas as plantas!</p>
+                    <p>Seu placar é de:</p>
+                    <p>
+                        <ul>
+                            <li><span>PvZ Internacional:</span> <span>{{number_of_trys[0]}}</span></li>
+                            <li><span>PvZ Chinease:</span> <span>{{number_of_trys[1]}}</span></li>
+                            <li><span>PvZ Doidão:</span> <span>{{number_of_trys[2]}}</span></li>
+                        </ul>
+                    </p>
+                </div>
+                <br>
+                <span class="enfase" style="color: var(--main-color);">Muito bem!</span>
+            </div>
+        </div>
+    {% endif %}
 </div>
 <hr>
 

@@ -3,25 +3,37 @@
 Testes
 {% endblock versao %}
 {% block conteudo %}
-{{ rows[0] }}
-<table class="table">
+
+<style>
+    .teste{
+        display: grid;
+        grid: 18rem / auto auto auto auto;
+        grid-gap: 10px;
+    }
+    .card{
+        display: block !important;
+        width: 18rem;
+    }
+</style>
+{% if request.endpoint == 'main_bp.testes' %}
+
+<div class="teste">
     {% for plant in rows %}
-        <tr>
-            <td>{{plant['name']}}</td>
-            <td>{{plant['type']}}</td>
-            <td>{{plant['sun_cust']}}</td>
-            <td>{{plant['tought']}}</td>
-            <td>{{plant['damage']}}</td>
-            <td>{{plant['recarga']}}</td>
-            <td>{{plant['rarity']}}</td>
-            <td>{{plant['usage']}}</td>
-            <td>{{plant['plant_origin']}}</td>
-            <td>{{plant['origin']}}</td>
-            <td>{{plant['classification']}}</td>
-            <td>{{plant['appearances']}}</td>
-            <td><img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="img-plant"></td>
-        </tr>
+    <div class="card">
+        <img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="card-img-top">
+        <div class="card-body">
+          <h3 class="card-title">{{plant['name']}}</h3>
+          <p class="card-text">{{plant['type']}}</p>
+          <p class="card-text">{{plant['plant_origin']}}</p>
+          <p class="card-text">{{plant['origin']}}</p>
+          <p class="card-text">{{plant['classification']}}</p>
+        </div>
+      </div>
     {% endfor %}
-    
-</table>
+</div>
+{% else %}
+    {{ plant }}
+    <img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="card-img-top">
+{% endif %}
+
 {% endblock conteudo %}
