@@ -143,8 +143,9 @@ whos-plants/
 - **Tabela de Palpites**: Uma tabela com seus palpites anteriores e a comparação de cada característica.
 
 ### Modos Atuais
-- Modo "Planta da versão Global": Tente adivinhar a planta da versão internacional de Plants vs Zombies 2.
-- Modo "Planta da versão chinesa": Tente adivinhar a planta da versão chinesa de Plants vs Zombies 2.
+- Modo "Planta da versão Global": Tente adivinhar a planta do dia, da versão internacional de Plants vs Zombies 2.
+- Modo "Planta da versão Chinesa": Tente adivinhar a planta do dia, da versão chinesa de Plants vs Zombies 2.
+- Modo "Planta da versão Doidona": Tente adivinhar a planta do dia, de todos os jogos de defesa de torre de Plants vs Zombies.
 - Modo "Plantas Infinitas": Tente adivinhar quantas plantas quiser da versão internacional de Plants vs Zombies 2.
 
 ### Funcionalidades Futuras
