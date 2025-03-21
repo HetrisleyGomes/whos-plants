@@ -1,0 +1,106 @@
+/* ---> VERSION <--- */
+.chinease-thamed {
+    header {
+        background-color: var(--scarlet-color);
+        border-bottom: var(--golden-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--red-second-color);
+    }
+    .form-label {
+        color: var(--red-second-color);
+    };
+    ul li a {
+        background-color: var(--scarlet-color);
+        
+    };
+    .btn-guess, ul li a:hover {
+        background-color: var(--red-second-color);
+    };
+    .area-results {
+        background-image: linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color)), linear-gradient(var(--bold-color), var(--bold-color)), linear-gradient(var(--main-color), var(--main-color));
+    }
+}
+.infinity-thamed {
+    header {
+        background: linear-gradient(to right, var(--main-color), var(--second-color));
+        border-bottom: var(--golden-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--golden-color);
+    }
+    tr {
+        border: var(--golden-color) 2px solid;
+        td {
+            border: var(--golden-color) 1px solid;
+        }
+    }
+    thead th {
+        border: var(--golden-color) 1px solid;
+    }
+}
+.all-thamed{
+    header {
+        background: var(--second-color);
+        border-bottom: var(--main-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--second-color);
+    }
+    tr {
+        border: var(--second-color) 2px solid;
+        td {
+            border: var(--second-color) 1px solid;
+        }
+    }
+    thead th {
+        background-color: var(--main-color);
+        border: var(--bold-color) 1px solid;
+    }
+    .text-white {
+        color: var(--main-color) !important;
+        .faded {
+            font-weight: 700;
+            opacity: 0.6;
+        };
+        summary {
+            font-weight: 700;
+        }
+    }
+}
+.img-thamed{
+    header {
+        background: var(--btn-color);
+        border-bottom: var(--main-color) 5px solid;
+    };
+    .form-control {
+        border-color: var(--second-color);
+    }
+    tr {
+        border-color: var(--light-color);
+        td {
+            color: var(--light-color);
+            border: none;
+            font-size: large;
+            img {
+                border: var(--light-color) 2px solid;
+                border-radius: 18px;
+            }
+        }
+    }
+    thead th {
+        background-color: var(--main-color);
+        border: var(--bold-color) 1px solid;
+    }
+    .text-white {
+        color: var(--main-color) !important;
+        .faded {
+            font-weight: 700;
+            opacity: 0.6;
+        };
+        summary {
+            font-weight: 700;
+        }
+    }
+}
+/* ---> fim dos THAMED <--- */

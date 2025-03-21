@@ -1,9 +1,13 @@
+.img-plant{
+    width: 98px;
+    height: 98px;
+}
 .img-container-mode{
     display: flex;
     position: relative;
     justify-content: center;
-    height: 36vh;
-    width: 22vw;
+    height: 275px;
+    width: 275px;
     padding: 1vh 1vw;
     margin: auto;
     border-radius: 2vw;

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block versao %}
-Gnome invasion | Guess the image
+Gnome invasion
+<span class="minimal">(Advinhe a planta pela imagem!)</span>
 {% endblock versao %}
 {% block conteudo %}
 <div class="container">
@@ -92,103 +93,15 @@ Gnome invasion | Guess the image
 
 <div class="container c-table">
     <table class="table">
-        <thead>
-            <th><strong>Guess</strong></th>
-            <th>Nome</th>
-            <th>Família</th>
-            <th>Custo de sóis</th>
-            <th>Resistência</th>
-            <th>Dano</th>
-            <th>Recarga</th>
-            <th>Uso</th>
-            <th>Raridade</th>
-            <th>Tipo de planta</th>
-            <th>Origem</th>
-            <th>Aparições</th>
-        </thead>
         {% for row in rows %}
             <tr>
-                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}"><img src="{{ url_for('main_bp.proxy_image', img_link=row.img_link) }}" alt="Imagem" class="img-plant"></td>
-                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}">{{ row.name }}</td>
-                <td class="{{ 'background-verde' if row.type == data['Type'][rand-1] else 'background-vermelho' }}">{{ row.type }}</td>
-                <td class="{{ 'background-verde' if row.sun_cust == data['Sun Cust'][rand-1] else 'background-vermelho' }}">{{ row.sun_cust }}
-                {% if row.sun_cust != data['Sun Cust'][rand-1] %}
-                    {% if row.sun_cust > data['Sun Cust'][rand-1] %}
-                        <ion-icon name="caret-down-circle-outline" class="icone"></ion-icon>
-                    {% else %}
-                        <ion-icon name="caret-up-circle-outline" class="icone"></ion-icon>
-                    {% endif %}
-                {% endif %}
-                </td>
-                <td class="{{ 'background-verde' if row.tought == data['Tought'][rand-1] else 'background-vermelho' }}">{{ row.tought }} 
-                {% if row.tought != data['Tought'][rand-1] %}
-                    {% if row.tought > data['Tought'][rand-1] %}
-                        <ion-icon name="caret-down-circle-outline" class="icone"></ion-icon>
-                    {% else %}
-                        <ion-icon name="caret-up-circle-outline" class="icone"></ion-icon>
-                    {% endif %}
-                {% endif %}
-                </td>
-                <td class="{{ 'background-verde' if row.damage == data['Damage'][rand-1] else 'background-vermelho' }}">{{ row.damage }} 
-                {% if row.damage != data['Damage'][rand-1] %}
-                    {% if row.damage > data['Damage'][rand-1] %}
-                        <ion-icon name="caret-down-circle-outline" class="icone"></ion-icon>
-                    {% else %}
-                        <ion-icon name="caret-up-circle-outline" class="icone"></ion-icon>
-                    {% endif %}
-                {% endif %}   
-                </td>
-                <td class="{{ 'background-verde' if row.recarga == data['Recarga'][rand-1] else 'background-vermelho' }}">{{ row.recarga }} 
-                {% if row.recarga != data['Recarga'][rand-1] %}
-                    {% if row.recarga > data['Recarga'][rand-1] %}
-                        <ion-icon name="caret-down-circle-outline" class="icone"></ion-icon>
-                    {% else %}
-                        <ion-icon name="caret-up-circle-outline" class="icone"></ion-icon>
-                    {% endif %}
-                {% endif %}   
-                </td>
-                <td class="{% if row.usage[1]  %}
-                            {% if row.usage[1] == data['Instant use'][rand-1] %}
-                                background-verde
-                            {% else %}
-                                background-vermelho
-                            {% endif %}
-                        {% elif row.usage[0] %}
-                            {% if row.usage[0] == data['Single use'][rand-1] and data['Instant use'][rand-1] == False%}
-                                background-verde
-                            {% else %}
-                                background-vermelho
-                            {% endif %}
-                        {% else %}
-                            {% if (False == data['Instant use'][rand-1] and False == data['Single use'][rand-1]) %}
-                                background-verde
-                            {% else %}
-                                background-vermelho
-                            {% endif %}
-                        {% endif %}">
-                    {% if row.usage[1] %}
-                        Instant use
-                    {% elif row.usage[0] %}
-                        Single use
-                    {% else %}
-                        Continuos
-                    {% endif %}
-                    
-                </td>
-                <td class="{{ 'background-verde' if row.rarity == data['Rarity'][rand-1] else 'background-vermelho' }}">{{ row.rarity }}</td>
-                <td class="{{ 'background-verde' if row.plant_origin == data['Plant_Origin'][rand-1] else 'background-vermelho' }}">{{ row.plant_origin }}</td>
-                <td class="{{ 'background-verde' if row.origin == data['Origin'][rand-1] else 'background-vermelho' }}">{{ row.origin }}</td>
-                <td class="{{ row.background }}">{{ row.appearances }}</td>               
+                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}" style="width: 40%;"><img src="{{ url_for('main_bp.proxy_image', img_link=row.img_link) }}" alt="Imagem" class="img-plant"></td>
+                <td class="{{ 'background-verde' if row.name == data['Name'][rand-1] else 'background-vermelho' }}" style="text-align: start;">{{ row.name }}</td>            
             </tr>
         {% endfor %}
     </table>
 </div>
-
-
 <br>
-
-
-
 
 <script>
     function validateInput() {
