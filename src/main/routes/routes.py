@@ -5,7 +5,6 @@ import hashlib
 from datetime import datetime
 import requests
 import os
-from PIL import Image, ImageEnhance
 import io
 
 main_bp = Blueprint("main_bp", __name__)
