@@ -1,16 +1,14 @@
 from flask import render_template, url_for, request, redirect, Blueprint, send_file
 import pandas as pd
-import random
 import hashlib
-from datetime import datetime
 import requests
 import os
-import io
+from ..utils.rand_num_generators import gerar_numero_aleatorio, gerar_numero_aleatorio_img, gerar_numero_aleatorio_random, get_data
+from ..utils.data_controllers import get_rows, get_all
 
 main_bp = Blueprint("main_bp", __name__)
 CACHE_DIR = 'cache'
 
-file_path = 'data/PVZ.xlsx'
 last_sheet = ''
 last_mode = 'normal'
 
@@ -38,7 +36,7 @@ def index():
         "index.html",
         data = data,
         names = names,
-        rows = get_rows(0),
+        rows = get_rows(0,used_values, data, rand),
         used_values = used_values[0],
         choosed_names = choosed_names[0],
         rand = rand,
@@ -60,7 +58,7 @@ def chinease():
         "chinease_version.html",
         data = data,
         names = names,
-        rows = get_rows(1),
+        rows = get_rows(1,used_values, data, rand),
         used_values = used_values[1],
         choosed_names = choosed_names[1],
         rand = rand,
@@ -77,12 +75,12 @@ def all():
         last_mode = 'all'
 
     names = data['Name'].tolist()
-    print(data['Name'][rand-1])
+
     return render_template(
         "all_mode.html",
         data = data,
         names = names,
-        rows = get_rows(2),
+        rows = get_rows(2,used_values, data, rand),
         used_values = used_values[2],
         choosed_names = choosed_names[2],
         rand = rand,
@@ -105,7 +103,7 @@ def img_guess():
         "image_guess.html",
         data = data,
         names = names,
-        rows = get_rows(3),
+        rows = get_rows(3,used_values, data, rand),
         used_values = used_values[3],
         choosed_names = choosed_names[3],
         used_values_len = len(used_values[3]),
@@ -131,7 +129,7 @@ def infinity():
         "infinity.html",
         data = data,
         names = names,
-        rows = get_rows(9),
+        rows = get_rows(9,used_values, data, rand),
         used_values = used_values[len(used_values)-1],
         choosed_names = choosed_names[len(choosed_names)-1],
         rand = rand,
@@ -147,7 +145,7 @@ def testes():
     return render_template(
         "test.html",
         data = data,
-        rows = get_all()
+        rows = get_all(data, rand)
         )
 
 @main_bp.route("/test/<id>")
@@ -155,7 +153,7 @@ def testes_id(id):
     global data
     if last_sheet != 'Database':
         data = get_data('Database')
-    print(type(id))
+
     plant = data.iloc[int(id)]
 
     return render_template(
@@ -199,144 +197,6 @@ def reset_infinity():
     victory[len(victory)-1] = False
     return redirect(url_for('main_bp.infinity'))
 
-
-def gerar_numero_aleatorio(sheet_name):
-    global last_sheet
-    last_sheet = sheet_name
-    # Carregar o arquivo Excel
-    data = pd.read_excel(file_path, sheet_name=sheet_name)
-    df = data[data['Name'].notna()]  # remove apenas as linhas onde todos os valores são NaN
-
-    # Obter o número de ocorrências (número de linhas no arquivo)
-    num_ocorrencias = len(df)
-
-    # Garantir que o número de ocorrências seja no mínimo 1
-    if num_ocorrencias < 1:
-        raise ValueError("O arquivo não possui dados suficientes.")
-
-    # Usar a data atual como semente para garantir que o número não mude durante o dia
-    # Exemplo de cálculo: gerando um número a partir da data
-    data_atual = datetime.now().date()
-    semente = int(data_atual.strftime("%Y%m%d"))  # Formato YYYYMMDD, ex: 20250219
-
-    # Definir o limite superior como o número de ocorrências
-    limite_superior = num_ocorrencias
-
-    # Gerar o número aleatório com base na semente
-    random.seed(semente)  # Usando a data como semente
-    numero_aleatorio = random.randint(1, limite_superior)
-
-    return numero_aleatorio
-
-def gerar_numero_aleatorio_img(sheet_name):
-    global last_sheet
-    last_sheet = sheet_name
-    # Carregar o arquivo Excel
-    data = pd.read_excel(file_path, sheet_name=sheet_name)
-    df = data[data['Name'].notna()]  # remove apenas as linhas onde todos os valores são NaN
-
-    # Obter o número de ocorrências (número de linhas no arquivo)
-    num_ocorrencias = len(df)
-
-    # Garantir que o número de ocorrências seja no mínimo 1
-    if num_ocorrencias < 1:
-        raise ValueError("O arquivo não possui dados suficientes.")
-
-    # Usar a data atual como semente para garantir que o número não mude durante o dia
-    # Exemplo de cálculo: gerando um número a partir da data
-    data_atual = datetime.now().date()
-    semente = int(data_atual.strftime("%Y%m%d")) + 365  # Formato YYYYMMDD, ex: 20250219
-
-    # Definir o limite superior como o número de ocorrências
-    limite_superior = num_ocorrencias
-
-    # Gerar o número aleatório com base na semente
-    random.seed(semente)  # Usando a data como semente
-    numero_aleatorio = random.randint(1, limite_superior)
-
-    return numero_aleatorio
-
-def gerar_numero_aleatorio_random(sheet_name):
-    global last_sheet
-    last_sheet = sheet_name
-    # Carregar o arquivo Excel
-    data = pd.read_excel(file_path, sheet_name=sheet_name)
-    df = data[data['Name'].notna()]  # remove apenas as linhas onde todos os valores são NaN
-
-    # Obter o número de ocorrências (número de linhas no arquivo)
-    num_ocorrencias = len(df)
-
-    # Garantir que o número de ocorrências seja no mínimo 1
-    if num_ocorrencias < 1:
-        raise ValueError("O arquivo não possui dados suficientes.")
-
-    # Definir o limite superior como o número de ocorrências
-    limite_superior = num_ocorrencias
-
-    numero_aleatorio = random.randint(1, limite_superior)
-
-    return numero_aleatorio
-
-def get_data(sheet_name):
-    global last_sheet
-    last_sheet = sheet_name
-    data = pd.read_excel(file_path, sheet_name=sheet_name, header=0)
-    df = data[data['Name'].notna()]
-
-    return df
-
-def get_rows(version):
-    rows = []
-    values_to_use = used_values[0] if version == 0 else (used_values[1] if version == 1 else (used_values[2] if version == 2 else (used_values[3] if version == 3 else used_values[len(used_values)-1])))
-    for value in values_to_use:
-        sun_cust = data['Sun Cust'].iloc[value - 1]
-        tought = data['Tought'].iloc[value - 1]
-        damage = data['Damage'].iloc[value - 1]
-        recarga = data['Recarga'].iloc[value - 1]
-        row = {
-            'name': data['Name'].iloc[value - 1],
-            'type': data['Type'].iloc[value - 1],
-            'sun_cust': int(sun_cust) if sun_cust.is_integer() else sun_cust,
-            'tought': int(tought) if tought.is_integer() else tought,
-            'damage': int(damage) if damage.is_integer() else damage,
-            'recarga': int(recarga) if recarga.is_integer() else recarga,
-            'rarity': data['Rarity'].iloc[value - 1],
-            'usage': [data['Single use'].iloc[value - 1],data['Instant use'].iloc[value - 1]],
-            'plant_origin': data['Plant_Origin'].iloc[value -1],
-            'origin': data['Origin'].iloc[value - 1],
-            'classification': data['Classification'].iloc[value - 1],
-            'appearances': data['Appearances'].iloc[value - 1],
-            'background': get_background(data['Appearances'].iloc[value - 1]),
-            'img_link': data['img_link'].iloc[value - 1],
-        }
-        rows.append(row)
-    rows.reverse()
-    
-    return rows
-
-def get_all():
-    rows = []
-    for index, value in data.iterrows():
-        row = {
-            'name': value['Name'],
-            'type': value['Type'],
-            'sun_cust': int(value['Sun Cust']),
-            'tought': int(value['Tought']),
-            'damage': int(value['Damage']),
-            'recarga': int(value['Recarga']),
-            'rarity': value['Rarity'],
-            'usage': [value['Single use'],value['Instant use']],
-            'plant_origin': value['Plant_Origin'],
-            'origin': value['Origin'],
-            'classification': value['Classification'],
-            'appearances': value['Appearances'],
-            'background-appearances': get_background(value['Appearances']),
-            'img_link': value['img_link'],
-        }
-        rows.append(row)
-
-    return rows
-
 @main_bp.route("/proxy-image")
 def proxy_image():
     # Substitua pelo link real da imagem
@@ -369,19 +229,6 @@ def download_image(url):
             raise Exception(f"Erro ao baixar a imagem: {response.status_code}")
     
     return cache_filename
-
-def get_background(values):
-    row_aparicoes = [appearance.strip() for appearance in values.split(',')]
-    data_aparicoes = [appearance.strip() for appearance in data['Appearances'][rand-1].split(',')]
-
-    if set(row_aparicoes) == set(data_aparicoes):
-        return 'background-verde'
-    # Verificar se existe alguma correspondência
-    if any(appearance in data_aparicoes for appearance in row_aparicoes):
-        return 'background-amarelo'
-    # Se não houver nenhuma correspondência
-    return 'background-vermelho'
-
 
 if not os.path.exists(CACHE_DIR):
     os.makedirs(CACHE_DIR)
