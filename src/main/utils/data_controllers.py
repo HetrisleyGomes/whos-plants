@@ -61,3 +61,9 @@ def get_background(values, data, rand):
         return 'background-amarelo'
     # Se não houver nenhuma correspondência
     return 'background-vermelho'
+
+def check_victory(victory):
+    for i in range(4):
+        if not victory[i]:  # Se algum valor for False, retorna False
+            return False
+    return True  # Se todos os valores forem True, retorna True

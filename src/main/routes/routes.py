@@ -1,10 +1,11 @@
 from flask import render_template, url_for, request, redirect, Blueprint, send_file
-import pandas as pd
 import hashlib
 import requests
 import os
+from datetime import datetime, timedelta
 from ..utils.rand_num_generators import gerar_numero_aleatorio, gerar_numero_aleatorio_img, gerar_numero_aleatorio_random, get_data
-from ..utils.data_controllers import get_rows, get_all
+from ..utils.data_controllers import get_rows, get_all, check_victory
+from ..utils.json_data import load_user_access, save_user_access
 
 main_bp = Blueprint("main_bp", __name__)
 CACHE_DIR = 'cache'
@@ -164,17 +165,52 @@ def testes_id(id):
 
 @main_bp.route("/makeguess", methods=["GET","POST"])
 def guesser():
+    global victory, data
+    
     id = int(request.form.get("id"))
     guess = request.form.get('guess')
     item = data[data['Name'].str.lower() == guess.lower()]
 
-    global victory
     used_values[id].append(int(item['ID'].iloc[0]))
     choosed_names[id].append(item['Name'].iloc[0])
 
     if data['Name'][rand-1] == item['Name'].iloc[0]:
         victory[id] = True
         number_of_trys[id] = used_values[id].__len__()
+
+    info = load_user_access()
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    today_str = today.strftime("%d%m%Y")
+    yesterday_str = yesterday.strftime("%d%m%Y")
+
+    if check_victory(victory):
+        values = {
+            "last_acess": info["last_acess"],
+            "daily_sequence": info['daily_sequence'],
+            "total_victories": {
+                "main": info['total_victories']["main"],
+                "chinease": info['total_victories']["chinease"]+1,
+                "crazy": info['total_victories']["crazy"]+1,
+                "gnome": info['total_victories']["gnome"]+1
+            }
+        }
+        save_user_access(values)
+    elif victory[0] == True and info['last_acess'] != today_str:
+        keep_sequence = info['daily_sequence']
+        if info['last_acess'] == yesterday_str or info['last_acess'] == " ":
+            keep_sequence = int(info['daily_sequence']) +1
+        values = {
+            "last_acess": today_str,
+            "daily_sequence": keep_sequence,
+            "total_victories": {
+                "main": info['total_victories']["main"]+1,
+                "chinease": info['total_victories']["chinease"],
+                "crazy": info['total_victories']["crazy"],
+                "gnome": info['total_victories']["gnome"]
+            }
+        }
+        save_user_access(values)
 
     if id == 0:
         return redirect(url_for('main_bp.index'))
@@ -235,6 +271,9 @@ if not os.path.exists(CACHE_DIR):
 
 if last_sheet == '':
     last_sheet = 'Database'
+
+access_info = load_user_access()
+
 # Testar a função
 rand = gerar_numero_aleatorio(last_sheet)
 #print(f"O número aleatório gerado para hoje é: {rand}")
