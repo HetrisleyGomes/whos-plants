@@ -113,8 +113,8 @@ whos-plants/
 ├── src/
 │   ├── main/
 │   │   ├── routes/     # Arquivos de rotas flask
-│   │   │   ├── routes.py       # Arquivos de rotas do modo principal
-│
+│   │   │   └── routes.py       # Arquivos de rotas do modo principal
+│	│
 │   │   ├── static/     # Arquivos estáticos como CSS, JavaScript e imagens
 │   │   │   ├── styles/
 │   │   │   ├── icons/
@@ -123,6 +123,8 @@ whos-plants/
 │   │   ├── templates/      # Templates HTML do jogo
 │   │   │   ├── index.html      # Página inicial
 │   │   │   └── base.html       # Página base do jogo
+│	│	
+│   └────── utils/      # Funções python extras
 │
 ├── data/       # Arquivos de dados, como o banco de dados de plantas (Excel)
 │   └── PVZ.xlsx        # Banco de dados com as informações das plantas
@@ -146,6 +148,7 @@ whos-plants/
 - Modo "Planta da versão Global": Tente adivinhar a planta do dia, da versão internacional de Plants vs Zombies 2.
 - Modo "Planta da versão Chinesa": Tente adivinhar a planta do dia, da versão chinesa de Plants vs Zombies 2.
 - Modo "Planta da versão Doidona": Tente adivinhar a planta do dia, de todos os jogos de defesa de torre de Plants vs Zombies.
+- Modo "Invasão Gnomo": Tente adivinhar a planta do dia pela imagem. A cada tentativa os gnomos ficam menos visíveis.
 - Modo "Plantas Infinitas": Tente adivinhar quantas plantas quiser da versão internacional de Plants vs Zombies 2.
 
 ### Funcionalidades Futuras
