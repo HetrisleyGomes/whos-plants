@@ -26,3 +26,57 @@
     border-radius: 3vw;
     border: var(--light-color) 2px solid;
 }
+
+.streak{
+    display: flex;
+    flex-direction: row;
+    vertical-align: center;
+    align-content: center;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    position: relative;
+}
+
+.main-streak{
+    position: relative;
+    bottom: 6px;
+    right: 2px;
+    width: 50px;
+    & img {
+        overflow-clip-margin: content-box;
+        overflow: clip; 
+    }
+}
+
+.streak-value{
+    display: block;
+    unicode-bidi: isolate;
+    position: absolute;
+    top: 60%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    color: #000;
+    font-weight: 1000;
+    font-size: 1.6rem;
+    text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #fff, 0 0 5px #fff;
+}
+
+/* Definindo a animação de fadeIn */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Aplicando a animação no elemento */
+.animate__fadeIn {
+    animation-name: fadeIn;
+    animation-duration: 1s; /* Define a duração da animação */
+    animation-timing-function: ease-in; /* Controla o ritmo da animação */
+    animation-fill-mode: forwards; /* Garante que o elemento permaneça visível após a animação */
+}

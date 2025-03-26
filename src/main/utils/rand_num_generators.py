@@ -83,9 +83,7 @@ def gerar_numero_aleatorio_random(sheet_name):
     return numero_aleatorio
 
 def get_data(sheet_name):
-    global last_sheet
-    last_sheet = sheet_name
     data = pd.read_excel(file_path, sheet_name=sheet_name, header=0)
     df = data[data['Name'].notna()]
 
-    return df
+    return df, sheet_name

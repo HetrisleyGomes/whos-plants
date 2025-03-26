@@ -24,13 +24,14 @@ infinity_number = 999
 @main_bp.route("/")
 @main_bp.route("/index")
 def index():
-    global rand, data, last_mode
+    global rand, data, last_mode, last_sheet
     if last_sheet != 'Database':
-        data = get_data('Database')
+        data, last_sheet = get_data('Database')
     if last_mode != 'normal':
         rand = gerar_numero_aleatorio('Database')
         last_mode = 'normal'
 
+    print(last_mode)
     names = data['Name'].tolist()
 
     return render_template(
@@ -42,18 +43,20 @@ def index():
         choosed_names = choosed_names[0],
         rand = rand,
         victory = victory,
-        number_of_trys = number_of_trys
+        number_of_trys = number_of_trys,
+        user_access = load_user_access()
         )
 
 @main_bp.route("/chinease")
 def chinease():
-    global rand, data, last_mode
+    global rand, data, last_mode, last_sheet
     if last_sheet != 'Chinese_Database':
         rand = gerar_numero_aleatorio('Chinese_Database')
-        data = get_data('Chinese_Database')
+        data, last_sheet = get_data('Chinese_Database')
         last_mode = 'chinease'
 
     names = data['Name'].tolist()
+    print(last_mode)
 
     return render_template(
         "chinease_version.html",
@@ -64,15 +67,16 @@ def chinease():
         choosed_names = choosed_names[1],
         rand = rand,
         victory = victory,
-        number_of_trys = number_of_trys
+        number_of_trys = number_of_trys,
+        user_access = load_user_access()
         )
 
 @main_bp.route("/all")
 def all():
-    global rand, data, last_mode
+    global rand, data, last_mode, last_sheet
     if last_sheet != 'All_data':
         rand = gerar_numero_aleatorio('All_data')
-        data = get_data('All_data')
+        data, last_sheet = get_data('All_data')
         last_mode = 'all'
 
     names = data['Name'].tolist()
@@ -86,14 +90,15 @@ def all():
         choosed_names = choosed_names[2],
         rand = rand,
         victory = victory,
-        number_of_trys = number_of_trys
+        number_of_trys = number_of_trys,
+        user_access = load_user_access()
         )
 
 @main_bp.route("/img_guess")
 def img_guess():
-    global rand, data, last_mode
+    global rand, data, last_mode, last_sheet
     if last_sheet != 'Database':
-        data = get_data('Database')
+        data, last_sheet = get_data('Database')
     if last_mode != 'image':
         rand = gerar_numero_aleatorio_img('Database')
         last_mode = 'image'
@@ -110,14 +115,15 @@ def img_guess():
         used_values_len = len(used_values[3]),
         rand = rand,
         victory = victory,
-        number_of_trys = number_of_trys
+        number_of_trys = number_of_trys,
+        user_access = load_user_access()
         )
 
 @main_bp.route("/infinity")
 def infinity():
-    global rand, data, infinity_number, last_mode
+    global rand, data, infinity_number, last_mode, last_sheet
     if last_sheet != 'Database':
-        data = get_data('Database')
+        data, last_sheet = get_data('Database')
         last_mode = 'infinity'
     if infinity_number == 999:
         rand = gerar_numero_aleatorio_random('Database')
@@ -134,14 +140,15 @@ def infinity():
         used_values = used_values[len(used_values)-1],
         choosed_names = choosed_names[len(choosed_names)-1],
         rand = rand,
-        victory = victory[len(victory)-1]
+        victory = victory[len(victory)-1],
+        user_access = load_user_access()
         )
 
 @main_bp.route("/test")
 def testes():
-    global data
+    global data, last_sheet
     if last_sheet != 'Database':
-        data = get_data('Database')
+        data, last_sheet = get_data('Database')
 
     return render_template(
         "test.html",
@@ -151,9 +158,9 @@ def testes():
 
 @main_bp.route("/test/<id>")
 def testes_id(id):
-    global data
+    global data, last_sheet
     if last_sheet != 'Database':
-        data = get_data('Database')
+        data, last_sheet = get_data('Database')
 
     plant = data.iloc[int(id)]
 
@@ -277,4 +284,4 @@ access_info = load_user_access()
 # Testar a função
 rand = gerar_numero_aleatorio(last_sheet)
 #print(f"O número aleatório gerado para hoje é: {rand}")
-data = get_data(last_sheet)
+data, last_sheet = get_data(last_sheet)
