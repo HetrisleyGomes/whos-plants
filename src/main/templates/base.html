@@ -63,9 +63,16 @@
                     </ul>                    
                 </div>
                 <div class="col col-1 ar">
-                    {% if user_access['daily_sequence'] > 0 %}
+                    {% if user_access['daily_sequence'] > 0 and user_access['last_acess'] == today %}
                     <div class="streak animate__fadeIn">
                         <img src="{{ url_for('static', filename='images/Streak.gif') }}" alt="Sequencia" class="main-streak">
+                        <div class="streak-value">
+                            {{ user_access['daily_sequence'] }}
+                        </div>
+                    </div>
+                    {% elif user_access['daily_sequence'] > 0 and user_access['last_acess'] == yesterday %}
+                    <div class="streak">
+                        <img src="{{ url_for('static', filename='images/StreakNone.png') }}" alt="Sequencia" class="main-streak">
                         <div class="streak-value">
                             {{ user_access['daily_sequence'] }}
                         </div>

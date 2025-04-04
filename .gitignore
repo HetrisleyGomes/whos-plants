@@ -174,4 +174,5 @@ cython_debug/
 /.venv
 /.vscode
 /cache/*
+/data/user_access.json
 >>>>>>> master

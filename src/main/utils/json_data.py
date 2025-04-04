@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 import os
 
@@ -28,3 +29,10 @@ def save_user_access(data):
     """Save user access information to the JSON file."""
     with open(USER_ACCESS_FILE, 'w') as f:
         json.dump(data, f, indent=4)
+
+def today_str_func():
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    today_str = today.strftime("%d%m%Y")
+    yesterday_str = yesterday.strftime("%d%m%Y")
+    return today_str, yesterday_str

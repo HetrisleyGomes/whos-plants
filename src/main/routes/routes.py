@@ -5,7 +5,7 @@ import os
 from datetime import datetime, timedelta
 from ..utils.rand_num_generators import gerar_numero_aleatorio, gerar_numero_aleatorio_img, gerar_numero_aleatorio_random, get_data
 from ..utils.data_controllers import get_rows, get_all, check_victory
-from ..utils.json_data import load_user_access, save_user_access
+from ..utils.json_data import load_user_access, save_user_access, today_str_func
 
 main_bp = Blueprint("main_bp", __name__)
 CACHE_DIR = 'cache'
@@ -31,8 +31,8 @@ def index():
         rand = gerar_numero_aleatorio('Database')
         last_mode = 'normal'
 
-    print(last_mode)
     names = data['Name'].tolist()
+    today_str, yesterday_str = today_str_func()
 
     return render_template(
         "index.html",
@@ -44,7 +44,9 @@ def index():
         rand = rand,
         victory = victory,
         number_of_trys = number_of_trys,
-        user_access = load_user_access()
+        user_access = load_user_access(),
+        today = today_str,
+        yesterday = yesterday_str
         )
 
 @main_bp.route("/chinease")
@@ -56,7 +58,7 @@ def chinease():
         last_mode = 'chinease'
 
     names = data['Name'].tolist()
-    print(last_mode)
+    today_str, yesterday_str = today_str_func()
 
     return render_template(
         "chinease_version.html",
@@ -68,7 +70,9 @@ def chinease():
         rand = rand,
         victory = victory,
         number_of_trys = number_of_trys,
-        user_access = load_user_access()
+        user_access = load_user_access(),
+        today = today_str,
+        yesterday = yesterday_str
         )
 
 @main_bp.route("/all")
@@ -80,6 +84,7 @@ def all():
         last_mode = 'all'
 
     names = data['Name'].tolist()
+    today_str, yesterday_str = today_str_func()
 
     return render_template(
         "all_mode.html",
@@ -91,7 +96,9 @@ def all():
         rand = rand,
         victory = victory,
         number_of_trys = number_of_trys,
-        user_access = load_user_access()
+        user_access = load_user_access(),
+        today = today_str,
+        yesterday = yesterday_str
         )
 
 @main_bp.route("/img_guess")
@@ -104,6 +111,7 @@ def img_guess():
         last_mode = 'image'
 
     names = data['Name'].tolist()
+    today_str, yesterday_str = today_str_func()
 
     return render_template(
         "image_guess.html",
@@ -116,7 +124,9 @@ def img_guess():
         rand = rand,
         victory = victory,
         number_of_trys = number_of_trys,
-        user_access = load_user_access()
+        user_access = load_user_access(),
+        today = today_str,
+        yesterday = yesterday_str
         )
 
 @main_bp.route("/infinity")
@@ -131,7 +141,7 @@ def infinity():
     
     print(infinity_number)
     names = data['Name'].tolist()
-
+    today_str, yesterday_str = today_str_func()
     return render_template(
         "infinity.html",
         data = data,
@@ -141,7 +151,9 @@ def infinity():
         choosed_names = choosed_names[len(choosed_names)-1],
         rand = rand,
         victory = victory[len(victory)-1],
-        user_access = load_user_access()
+        user_access = load_user_access(),
+        today = today_str,
+        yesterday = yesterday_str
         )
 
 @main_bp.route("/test")
@@ -186,10 +198,7 @@ def guesser():
         number_of_trys[id] = used_values[id].__len__()
 
     info = load_user_access()
-    today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-    today_str = today.strftime("%d%m%Y")
-    yesterday_str = yesterday.strftime("%d%m%Y")
+    today_str, yesterday_str = today_str_func()
 
     if check_victory(victory):
         values = {
@@ -207,6 +216,8 @@ def guesser():
         keep_sequence = info['daily_sequence']
         if info['last_acess'] == yesterday_str or info['last_acess'] == " ":
             keep_sequence = int(info['daily_sequence']) +1
+        else:
+            keep_sequence = 1
         values = {
             "last_acess": today_str,
             "daily_sequence": keep_sequence,

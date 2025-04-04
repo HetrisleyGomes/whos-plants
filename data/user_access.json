@@ -1,10 +1,10 @@
 {
-    "last_acess": "26032025",
-    "daily_sequence": 2,
+    "last_acess": "01042025",
+    "daily_sequence": 1,
     "total_victories": {
-        "main": 2,
-        "chinease": 2,
-        "crazy": 2,
-        "gnome": 2
+        "main": 5,
+        "chinease": 3,
+        "crazy": 3,
+        "gnome": 3
     }
 }
