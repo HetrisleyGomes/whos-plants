@@ -5,21 +5,63 @@ Testes
 {% block conteudo %}
 
 <style>
-    .teste{
-        display: grid;
-        grid: 18rem / auto auto auto auto;
-        grid-gap: 10px;
-    }
-    .card{
-        display: block !important;
-        width: 18rem;
-    }
+
+
 </style>
 {% if request.endpoint == 'main_bp.testes' %}
 
-<div class="teste">
+<div class="" style="padding-bottom: 5vh;">
+    <ul>
+        {% for card in cards %}
+        <li>{{ card }}</li>
+        {% endfor %}
+    </ul>
+        
+    <form action="/sortearcards" class="form">
+        <button class="btn btn-sucess">Aperte-me</button>
+    </form>
+    {% if sorted_cards %}
+    <h2 class="frase-de-efeito">Cards obtidos!</h2>
+        <div class="card-list">
+        {% for plant in sorted_cards %}
+            <div class="new-card">
+                <div class="card {{plant['type']}} {{plant['origin']}}">
+                <div class="cost-sun">
+                    <img src="{{ url_for('static', filename='images/Sun_Tag.webp') }}" alt="Imagem" class="card-tag-cost">
+                    <div class="item-overlay">
+                        <img src="{{ url_for('static', filename='images/Sun_PvZ2.webp') }}" alt="Imagem" class="card-img-cost">
+                        <p class="card-text-cost">{{plant['sun_cust']}}</p>
+                    </div>
+                </div>
+                <img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="card-img-top">
+                <div class="card-body">
+                <h3 class="card-title">{{plant['name']}}</h3>
+                <p class="card-text">{{plant['type']}}</p>
+                <p class="card-text">{{plant['plant_origin']}}</p>
+                <p class="card-text">{{plant['origin']}}</p>
+                <p class="card-text">{{plant['classification']}}</p>
+                </div>
+                <div class="card-rarity {{plant['rarity']}}">
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="vertical_line"></div>
+    {% endif %}
+</div>
+
+<div class="card-list">
     {% for plant in rows %}
-    <div class="card">
+      {% if plant['name'] in cards %}
+      <div class="card {{plant['type']}} {{plant['origin']}}">
+        <div class="cost-sun">
+            <img src="{{ url_for('static', filename='images/Sun_Tag.webp') }}" alt="Imagem" class="card-tag-cost">
+            <div class="item-overlay">
+                <img src="{{ url_for('static', filename='images/Sun_PvZ2.webp') }}" alt="Imagem" class="card-img-cost">
+                <p class="card-text-cost">{{plant['sun_cust']}}</p>
+            </div>
+        </div>
         <img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="card-img-top">
         <div class="card-body">
           <h3 class="card-title">{{plant['name']}}</h3>
@@ -28,12 +70,43 @@ Testes
           <p class="card-text">{{plant['origin']}}</p>
           <p class="card-text">{{plant['classification']}}</p>
         </div>
+        <div class="card-rarity {{plant['rarity']}}">
+        </div>
       </div>
+      {% endif %}
     {% endfor %}
 </div>
 {% else %}
     {{ plant }}
     <img src="{{ url_for('main_bp.proxy_image', img_link=plant['img_link']) }}" alt="Imagem" class="card-img-top">
 {% endif %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const containers = document.querySelectorAll('.card-title');
 
+            containers.forEach(container => {
+                const text = container.dataset.text || container.textContent.trim(); // Pega do data-text ou do conteúdo
+                container.textContent = text; // Define o texto
+
+                const textLength = text.length;
+
+                // Mapeia o comprimento para um tamanho de fonte (ajuste esses valores!)
+                let fontSize;
+                if (textLength <= 2) {
+                    fontSize = 2.5; // Muito curto
+                } else if (textLength <= 5) {
+                    fontSize = 2; // Curto
+                } else if (textLength <= 13) {
+                    fontSize = 1.5; // Médio
+                } else if (textLength <= 20) {
+                    fontSize = 1.2; // Longo
+                } else {
+                    fontSize = 0.5; // Muito longo
+                }
+
+                // Aplica o estilo
+                container.style.fontSize = `${fontSize}rem`;
+            });
+        });
+    </script>
 {% endblock conteudo %}

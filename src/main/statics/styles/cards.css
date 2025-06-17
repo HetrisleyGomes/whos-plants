@@ -1,0 +1,250 @@
+.card-list{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+}
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    height: 405px;
+}
+.card-body{
+    padding: 1rem !important;
+}
+.frase-de-efeito {
+    font-weight: 700;
+    font-size: 5vh;
+    color: #fff;
+}
+.Natural {
+    border: 10px solid #eeeeee;
+    border-radius: .25rem;
+}
+.vertical_line {
+    border: 1px solid #eeeeee;
+    margin: 3vh 0 10px;
+}
+.Premium, .Gemium {
+    border: 10px solid transparent;
+    border-image: linear-gradient(to bottom right, #E0E0E0, #C0C0C0, #A0A0A0, #F0F0F0) 1;
+    /* Explicação do gradiente:
+       - #E0E0E0: Cinza muito claro
+       - #C0C0C0: Cinza prateado
+       - #A0A0A0: Cinza médio
+       - #F0F0F0: Quase branco (para reflexos)
+    */
+    border-radius: .25rem;
+    padding: 1px;
+}
+.Sementium{
+    border: 10px solid transparent; /* Essencial! Define a largura da borda, mas a cor será a do gradiente */
+    border-image: linear-gradient(to bottom right, #FFD700, #DAA520, #B8860B, #FFD700) 1;
+    /* Explicação do gradiente:
+       - #FFD700: Gold (Dourado puro)
+       - #DAA520: Goldenrod (Um dourado mais terroso)
+       - #B8860B: DarkGoldenrod (Um dourado escuro/bronze)
+       - to bottom right: Direção do gradiente
+       - 1: Este é o 'border-image-slice'. Define como a imagem da borda é fatiada. '1' significa que ela usa a imagem inteira.
+    */
+    border-radius: .25rem; /* Mantém seus cantos arredondados */
+}
+.card-img-top {
+    width: 14vw;
+    align-self: center;
+    border: #eeeeee 4px solid;
+    border-radius: 42px;
+    box-sizing: border-box;
+    margin: 1vw;
+}
+.cost-sun {
+    position: absolute;
+    right: 6.3vw;
+    top: 0;
+    display: flex;      /* Para centralizar o texto ou ajustar o alinhamento das imagens */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    box-sizing: border-box;
+    & .card-tag-cost {
+        transform: scaleY(-1);
+        position: absolute; /* Ocupa todo o contêiner absoluto */
+        top: 0;
+        left: 0;
+        object-fit: cover; /* Garante que a imagem preencha, cortando se necessário */
+        z-index: 1;
+    }
+    & .item-overlay {
+        position: absolute; /* Ocupa o mesmo espaço do absolute-container */
+        top: 0;
+        left: 3vw;
+        z-index: 2; /* Fica acima da imagem de fundo */
+        /* Usa Flexbox para centralizar a middle-image e o overlay-text dentro dele */
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center;
+    }
+    & .card-img-cost {
+        width: 3vw;   /* Reduz a imagem para 80% da largura do seu contêiner (middle-image-container) */
+        object-fit: contain; /* Garante que a imagem caiba completamente, sem corte */
+        z-index: 3; /* Fica sobre a imagem de fundo */
+    }
+    & .card-text-cost {
+        position: absolute; /* Posiciona o texto absolutamente dentro de middle-image-container */
+        z-index: 4; /* Fica sobre a imagem do meio */
+        color: white; /* Cor principal do texto */
+        font-size: 1.5em; /* Ajuste o tamanho da fonte conforme necessário */
+        font-weight: bold;
+        text-align: center; /* Garante que o texto seja centralizado dentro do seu próprio elemento <p> */
+        white-space: nowrap; /* Evita que o texto quebre linhas */
+        padding: 5px;
+        text-shadow:
+            -1px -1px 0 #000, /* Canto superior esquerdo */
+            1px -1px 0 #000, /* Canto superior direito */
+            -1px  1px 0 #000, /* Canto inferior esquerdo */
+            1px  1px 0 #000; /* Canto inferior direito */
+    }
+}
+.card-title{
+    font-weight: 800;
+    color: #fff;
+    text-shadow:
+        -1px -1px 0 #333, /* Canto superior esquerdo */
+        1px -1px 0 #333, /* Canto superior direito */
+        -1px  1px 0 #333, /* Canto inferior esquerdo */
+        1px  1px 0 #333; /* Canto inferior direito */
+}
+.card-text {
+    padding-bottom: 3px;
+}
+.Dispara {
+    background-color: #72b93e;
+}
+.Esclarecida{
+    background-color: #ffcd0e;
+}
+.Endurecida{
+    background-color: #b48847;
+}
+.Bombarda{
+    background-color: #ff7e25;
+}
+.Arma{
+    background-color: #865243;
+    color: #fff;
+}
+.Perfura{
+    background-color: #4a4a4a;
+    color: #fff;
+}
+.Refrea{
+    background-color: #ababab;
+}
+.Surra{
+    background-color: #329d46;
+}
+.Resfriada{
+    background-color: #2c82d6;
+}
+.Aquecida{
+    background-color: #de2826;
+}
+.Fila{
+    background-color: #48b4a1;
+}
+.Envenenada{
+    background-color: #923eac;
+    color: #fff;
+}
+.Encanta{
+    background-color: #fa47c1;
+}
+.Sombra{
+    background-color: #826893;
+}
+.card-rarity {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 20px;  /* Largura do quadrado */
+    height: 20px; /* Altura do quadrado */
+    border-radius: 4px; /* Opcional: cantos levemente arredondados */
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Borda sutil para destacá-lo */
+}
+.Common{
+    background-color: #ddd;
+}
+.Uncommon{
+    background-color: #89e49d;
+}
+.Rare{
+    background-color: #75b2f7;
+}
+.Epic{
+    background: linear-gradient(to bottom right, #b174e2, #ddbbfc, #b174e2);
+}
+.Legendary{
+    background: linear-gradient(to bottom right, #FFD700, #DAA520, #B8860B, #FFD700);
+}
+.Mythical{
+    background: linear-gradient(to bottom right, #f73e1d, #e03b30, #c01f1a, #ff504a);
+}
+ /* === CSS para o efeito de luz giratória === */
+
+/* A classe para as cartas sorteadas */
+.new-card {
+    /* Adicione um padding extra para que a luz tenha espaço ao redor da borda */
+    padding: 3px; /* Exemplo, ajuste conforme necessário */
+    border: none; /* Remove a borda padrão se o brilho for a nova "borda" */
+    overflow: hidden;
+    position: relative;
+    z-index: 1; /* Garante que o conteúdo do cartão esteja acima do brilho */
+    box-shadow: none; /* Remova a sombra padrão se não for usá-la */
+}
+
+/* Pseudo-elemento para criar o efeito de luz */
+.new-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%; /* Largura da "luz" */
+    height: 200%; /* Altura da "luz" */
+    background: conic-gradient(
+        from 0deg, /* Início do gradiente, para girar o ponto de partida */
+        #ff00ff, /* Cor 1 (Ex: magenta) */
+        #00ffff, /* Cor 2 (Ex: ciano) */
+        #ffff00, /* Cor 3 (Ex: amarelo) */
+        #ff00ff  /* Volta para a cor 1 para um loop suave */
+    );
+    /* Ajusta a curva da luz para seguir a borda arredondada do cartão */
+    border-radius: inherit; /* Herda o border-radius do elemento pai */
+    
+    /* Inicia a animação */
+    animation: rotateLight 4s linear infinite; /* 4s de duração, linear, infinito */
+    z-index: -1; /* Coloca a luz por baixo do conteúdo do cartão */
+}
+
+/* Define a animação de rotação */
+@keyframes rotateLight {
+    from {
+        transform: rotate(0deg); /* Começa em 0 graus */
+    }
+    to {
+        transform: rotate(360deg); /* Gira 360 graus */
+    }
+}
+
+/* Opcional: Efeito de desfoque para a luz (bloom) */
+.new-card::after {
+    content: '';
+    position: absolute;
+    inset: 0; /* Cobre todo o elemento pai */
+    background: inherit; /* Herda o background do pseudo-elemento ::before para aplicar o desfoque */
+    filter: blur(10px); /* Ajuste o valor para mais ou menos desfoque */
+    z-index: -2; /* Coloca o desfoque por baixo da luz principal */
+    opacity: 0.5; /* Ajuste a opacidade do desfoque */
+}

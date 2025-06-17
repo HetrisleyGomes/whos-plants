@@ -1,10 +1,11 @@
-from flask import render_template, url_for, request, redirect, Blueprint, send_file
+from flask import render_template, url_for, request, redirect, Blueprint, send_file, session
 import hashlib
 import requests
 import os
+import random
 from datetime import datetime, timedelta
 from ..utils.rand_num_generators import gerar_numero_aleatorio, gerar_numero_aleatorio_img, gerar_numero_aleatorio_random, get_data
-from ..utils.data_controllers import get_rows, get_all, check_victory
+from ..utils.data_controllers import get_rows, get_all, check_victory, get_all_plants
 from ..utils.json_data import load_user_access, save_user_access, today_str_func
 
 main_bp = Blueprint("main_bp", __name__)
@@ -156,17 +157,57 @@ def infinity():
         yesterday = yesterday_str
         )
 
+_cached_data = None
+_last_sheet_loaded = None
+_card_collection = []
+
 @main_bp.route("/test")
 def testes():
-    global data, last_sheet
-    if last_sheet != 'Database':
-        data, last_sheet = get_data('Database')
+    global _cached_data, _last_sheet_loaded # Para simular o cache de dados globalmente neste exemplo
 
+    if _last_sheet_loaded != 'Database' or _cached_data is None:
+        _cached_data, _last_sheet_loaded = get_data('Database')
+
+    sorted_cards_for_template = session.get('sorted_cards', []) 
+    # Ao recuperar da sessão, converta a lista de volta para um set para manter a unicidade
+    user_card_collection_list = session.get('user_card_collection', [])
+    user_card_collection = set(user_card_collection_list)
+
+    today_str, yesterday_str = today_str_func()
+    
     return render_template(
         "test.html",
-        data = data,
-        rows = get_all(data, rand)
+        data = _cached_data,
+        rows = get_all_plants(_cached_data),
+        user_access = load_user_access(),
+        sorted_cards = sorted_cards_for_template, # As cartas sorteadas para exibir
+        today = today_str,
+        yesterday = yesterday_str,
+        cards = user_card_collection
         )
+
+@main_bp.route("/sortearcards")
+def sortearcards():
+    global _cached_data
+    if _cached_data is None:
+        _cached_data, _ = get_data('Database')
+
+    sorted_cards = select_cards_by_rarity(get_all_plants(_cached_data))
+
+    # 1. Recupera a coleção existente da sessão (ou cria uma nova lista vazia se não houver)
+    # E converte para set para garantir a unicidade durante a adição
+    user_card_collection_list = session.get('user_card_collection', [])
+    user_card_collection_set = set(user_card_collection_list) # Convertido para set
+
+    # 2. Adiciona os nomes das novas cartas à coleção usando .add() no set
+    for card in sorted_cards:
+        user_card_collection_set.add(card['name'])
+
+    # 3. Armazena a coleção atualizada de volta na sessão, convertendo o set para list
+    session['user_card_collection'] = list(user_card_collection_set) # Convertido de volta para list
+    
+    session['sorted_cards'] = sorted_cards
+    return redirect(url_for('main_bp.testes'))
 
 @main_bp.route("/test/<id>")
 def testes_id(id):
@@ -283,6 +324,73 @@ def download_image(url):
             raise Exception(f"Erro ao baixar a imagem: {response.status_code}")
     
     return cache_filename
+
+def select_cards_by_rarity(all_plants_data, num_cards=5):
+    # Dicionário para armazenar plantas por raridade
+    plants_by_rarity = {}
+    for plant in all_plants_data:
+        rarity = plant['rarity']
+        if rarity not in plants_by_rarity:
+            plants_by_rarity[rarity] = []
+        plants_by_rarity[rarity].append(plant)
+
+    # --- Defina os pesos para cada raridade ---
+    # Você pode ajustar esses pesos conforme a sua necessidade.
+    # A soma dos pesos não precisa ser 1, mas as proporções importam.
+    rarity_weights = {
+        'Common': 1,    # 50% de chance
+        'Uncommon': 0.0,  # 30% de chance
+        'Rare': 0.0,     # 15% de chance
+        'Epic': 0.0,    # 4% de chance
+        'Legendary': 0.0,  # 1% de chance
+        'Mythical': 0.0
+    }
+
+    # As raridades disponíveis no seu jogo
+    available_rarities = list(rarity_weights.keys())
+    selected_cards = []
+
+    for _ in range(num_cards):
+
+        if _ == 1:
+            rarity_weights['Common'] = 0.5
+            rarity_weights['Uncommon'] = 0.5
+        elif _ == 2:
+            rarity_weights['Common'] = 0.15
+            rarity_weights['Uncommon'] = 0.5
+            rarity_weights['Rare'] = 0.35
+        elif _ == 3:
+            rarity_weights['Common'] = 0.0
+            rarity_weights['Uncommon'] = 0.4
+            rarity_weights['Rare'] = 0.4
+            rarity_weights['Epic'] = 0.2
+        elif _ == 4:
+            rarity_weights['Uncommon'] = 0.0
+            rarity_weights['Rare'] = 0.45
+            rarity_weights['Epic'] = 0.30
+            rarity_weights['Mythical'] = 0.20
+            rarity_weights['Legendary'] = 0.05
+
+        # Os pesos correspondentes às raridades
+        weights = [rarity_weights[r] for r in available_rarities]
+
+
+        # Escolhe uma raridade baseada nos pesos
+        chosen_rarity = random.choices(available_rarities, weights=weights, k=1)[0]
+
+        # Filtra as plantas disponíveis para a raridade escolhida
+        # Garante que só sorteia plantas da raridade que acabou de ser escolhida.
+        possible_plants_for_rarity = plants_by_rarity.get(chosen_rarity, [])
+
+        if not possible_plants_for_rarity:
+            print(f"Aviso: Não há plantas disponíveis para a raridade '{chosen_rarity}'. Pulando esta seleção.")
+            continue # Pula para a próxima iteração se não houver plantas dessa raridade
+
+        # Seleciona uma planta aleatoriamente dentro da raridade escolhida
+        selected_plant = random.choice(possible_plants_for_rarity)
+        selected_cards.append(selected_plant)
+    
+    return selected_cards
 
 if not os.path.exists(CACHE_DIR):
     os.makedirs(CACHE_DIR)

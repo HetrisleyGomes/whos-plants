@@ -50,6 +50,28 @@ def get_all(data, rand):
 
     return rows
 
+def get_all_plants(data):
+    rows = []
+    for index, value in data.iterrows():
+        row = {
+            'name': value['Name'],
+            'type': value['Type'],
+            'sun_cust': int(value['Sun Cust']),
+            'tought': int(value['Tought']),
+            'damage': int(value['Damage']),
+            'recarga': int(value['Recarga']),
+            'rarity': value['Rarity'],
+            'usage': [value['Single use'],value['Instant use']],
+            'plant_origin': value['Plant_Origin'],
+            'origin': value['Origin'],
+            'classification': value['Classification'],
+            'appearances': value['Appearances'],
+            'img_link': value['img_link'],
+        }
+        rows.append(row)
+
+    return rows
+
 def get_background(values, data, rand):
     row_aparicoes = [appearance.strip() for appearance in values.split(',')]
     data_aparicoes = [appearance.strip() for appearance in data['Appearances'][rand-1].split(',')]
